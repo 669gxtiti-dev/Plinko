@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=0.5,maximum-scale=3,user-scalable=yes,viewport-fit=cover">
+<title>PlinkoCash</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0e1a;display:flex;align-items:center;justify-content:center;}
+
+/* ── APP SHELL ── */
+#app{position:relative;overflow:hidden;
+  width:100vw;height:100vh;height:100dvh;
+  max-width:100vw;max-height:100dvh;
+  font-family:'Nunito',sans-serif;display:flex;flex-direction:column;
+  transition:background .6s;}
+/* Background themes */
+.bg-ocean{background:linear-gradient(180deg,#1a8fd1 0%,#3bb0e8 22%,#7dd4f5 38%,#aae3f7 42%,#e8c87a 43.5%,#c8703a 50%,#a85828 100%);}
+.bg-sunset{background:linear-gradient(180deg,#ff6b35 0%,#f7931e 25%,#ffd700 42%,#ffe580 44%,#c8703a 50%,#8b3a1a 100%);}
+.bg-night{background:linear-gradient(180deg,#0d0d2b 0%,#1a1a4e 30%,#2d2d6b 45%,#1a3a2a 50%,#0d2010 100%);}
+.bg-coral{background:linear-gradient(180deg,#ff4499 0%,#ff77bb 25%,#ffaacc 40%,#ffe0ee 44%,#c8703a 50%,#a85828 100%);}
+.bg-forest{background:linear-gradient(180deg,#2d5a27 0%,#4a8f3f 25%,#7ac46a 40%,#a8d89a 44%,#c8703a 50%,#a85828 100%);}
+/* HOLOGRAPHIC THEME */
+.bg-holo{background:linear-gradient(180deg,#0a0a1a 0%,#1a0a2e 20%,#0a1a2e 40%,#1a1a1a 45%,#0d1a0d 50%,#0a0a0a 100%);position:relative;}
+.bg-holo::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(135deg,
+    rgba(255,0,128,.12) 0%,rgba(0,255,255,.12) 15%,rgba(128,0,255,.12) 30%,
+    rgba(255,128,0,.10) 45%,rgba(0,255,128,.12) 60%,rgba(255,0,255,.12) 75%,
+    rgba(0,128,255,.12) 90%,rgba(255,0,128,.12) 100%);
+  animation:holoShift 4s linear infinite;background-size:400% 400%;}
+.bg-holo::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,
+    transparent 0px,transparent 3px,rgba(255,255,255,.018) 3px,rgba(255,255,255,.018) 4px);
+  animation:holoScan 8s linear infinite;}
+@keyframes holoShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes holoScan{0%{background-position:0 0}100%{background-position:0 200px}}
+/* ensure holo children appear above pseudo-elements */
+.bg-holo > *{position:relative;z-index:1;}
+.bg-holo #cw{z-index:1;}
+.bg-flower{position:absolute;pointer-events:none;opacity:.06;font-size:clamp(55px,14vw,90px);}
+.bg-flower.f1{top:5%;left:-2%;transform:rotate(-15deg);}
+.bg-flower.f2{top:8%;right:-3%;transform:rotate(25deg);}
+
+/* ── HEADER ── */
+#hdr{height:clamp(44px,6vh,52px);background:rgba(0,70,130,.55);backdrop-filter:blur(8px);
+  display:flex;align-items:center;padding:0 6px;gap:4px;flex-shrink:0;z-index:60;
+  border-bottom:1px solid rgba(255,255,255,.12);}
+.hpill{display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.38);border-radius:20px;padding:3px 7px;min-width:0;flex-shrink:0;}
+.hpill .hi{font-size:clamp(11px,3vw,15px);}
+.hpill .hv{font-family:'Fredoka One';font-size:clamp(11px,3vw,14px);color:#7fff00;white-space:nowrap;}
+.hpill.gold .hv{color:#ffd700;}.hpill.pur .hv{color:#ce93d8;}
+#btn-esp{flex:1;text-align:center;background:#3d9140;border:2px solid #2e7d32;border-radius:16px;
+  font-family:'Fredoka One';font-size:clamp(8px,2.3vw,11px);color:#fff;padding:4px 2px;
+  cursor:pointer;box-shadow:0 3px 0 #1b5e20;transition:transform .1s;white-space:nowrap;}
+#btn-esp:active{transform:scale(.95);}
+.hgear{width:27px;height:27px;background:rgba(0,120,220,.45);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;}
+
+/* ── INFO ROW ── */
+#irow{height:clamp(38px,5.2vh,48px);display:flex;align-items:center;justify-content:space-between;
+  padding:2px 6px;flex-shrink:0;z-index:55;}
+#fish-pill{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.22);
+  border-radius:13px;padding:3px 8px;cursor:pointer;flex-shrink:0;}
+.fpico{font-size:clamp(14px,3.8vw,19px);}
+.fpv{font-family:'Fredoka One';font-size:clamp(10px,2.6vw,13px);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);}
+#slot-wrap{display:flex;gap:2px;background:rgba(0,50,120,.6);border-radius:10px;
+  padding:3px 5px;cursor:pointer;position:relative;align-items:center;}
+.sbox{width:clamp(25px,6.8vw,33px);height:clamp(25px,6.8vw,33px);background:#1565c0;border-radius:6px;
+  border:2px solid #42a5f5;display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka One';font-size:clamp(12px,3.5vw,17px);color:#fff;overflow:hidden;}
+.sbox.spin{animation:sboxSpin .4s ease;}
+@keyframes sboxSpin{0%{transform:translateY(-110%);opacity:0}55%{transform:translateY(5%);}100%{transform:translateY(0);opacity:1}}
+#slot-badge{position:absolute;top:-5px;right:-5px;background:#f44336;color:#fff;border-radius:50%;
+  width:15px;height:15px;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:1;}
+#balls-pill{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.22);
+  border-radius:13px;padding:3px 7px;cursor:pointer;flex-shrink:0;}
+.bsm{width:clamp(10px,2.7vw,13px);height:clamp(10px,2.7vw,13px);border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff 20%,#42a5f5 55%,#0d47a1);flex-shrink:0;}
+.bvtxt{font-family:'Fredoka One';font-size:clamp(10px,2.6vw,13px);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);}
+#balls-plus{background:linear-gradient(135deg,#ffd700,#ff9800);border:none;border-radius:50%;
+  width:clamp(18px,5vw,22px);height:clamp(18px,5vw,22px);font-family:'Fredoka One';
+  font-size:clamp(13px,3.5vw,16px);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 0 rgba(0,0,0,.3);transition:transform .1s;flex-shrink:0;}
+#balls-plus:active{transform:scale(.88);}
+#next-ball{position:absolute;top:clamp(82px,11.5vh,96px);right:8px;z-index:54;
+  font-size:clamp(8px,2vw,10px);color:#fffde7;font-weight:800;text-align:right;}
+
+/* ── CHARACTER (swimmer) ── */
+#char{position:absolute;z-index:51;font-size:clamp(22px,5.8vw,30px);
+  top:clamp(58px,8.2vh,70px);left:50%;transform:translateX(-50%);
+  transition:left .45s cubic-bezier(.34,1.56,.64,1);
+  animation:charBob 2s ease-in-out infinite;pointer-events:none;}
+@keyframes charBob{0%,100%{margin-top:0}50%{margin-top:-3px}}
+.char-j{animation:charJump .4s ease forwards!important;}
+@keyframes charJump{
+  0%{transform:translateX(-50%) scaleX(1) scaleY(1)}
+  25%{transform:translateX(-50%) scaleX(.82) scaleY(1.28) translateY(-18px)}
+  55%{transform:translateX(-50%) scaleX(1.06) scaleY(.88) translateY(-6px)}
+  100%{transform:translateX(-50%) scaleX(1) scaleY(1) translateY(0)}
+}
+
+/* ── EVENT BANNER ── */
+#ev-banner{position:absolute;top:clamp(98px,13.8vh,114px);left:50%;transform:translateX(-50%);
+  z-index:72;pointer-events:none;white-space:nowrap;display:none;
+  font-family:'Fredoka One';font-size:clamp(15px,4vw,21px);
+  color:#ffd700;text-shadow:2px 2px 0 #b45000,0 0 16px #ff9800;}
+.ev-anim{animation:evPop .4s cubic-bezier(.34,1.56,.64,1),evFade .35s ease 1.7s forwards;}
+@keyframes evPop{from{transform:translateX(-50%) scale(.25);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+@keyframes evFade{to{opacity:0}}
+
+/* ── RAIN OVERLAY ── */
+#rain-overlay{position:absolute;inset:0;pointer-events:none;z-index:68;overflow:hidden;display:none;}
+.rain-coin{position:absolute;top:-30px;font-size:clamp(14px,4vw,20px);
+  animation:rainFall linear forwards;}
+@keyframes rainFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(110vh) rotate(400deg)}}
+
+/* ── JACKPOT FLASH ── */
+#jflash{position:absolute;inset:0;pointer-events:none;z-index:67;display:none;}
+.flash-anim{animation:jackFlash .6s ease;}
+@keyframes jackFlash{0%,100%{background:rgba(255,215,0,0)}30%{background:rgba(255,215,0,.38)}70%{background:rgba(255,215,0,.18)}}
+
+/* ── CANVAS ── */
+#cw{position:relative;flex:1;min-height:0;overflow:hidden;}
+canvas{display:block;width:100%;height:100%;}
+
+/* ── SIDE BUTTONS ── */
+#sl{position:absolute;left:2px;z-index:52;top:clamp(100px,14.5vh,116px);
+  display:flex;flex-direction:column;gap:clamp(4px,.9vh,6px);}
+.sbtn{width:clamp(43px,11.2vw,53px);display:flex;flex-direction:column;align-items:center;
+  background:rgba(255,255,255,.14);border-radius:11px;padding:clamp(3px,.8vh,5px) 3px;
+  cursor:pointer;transition:transform .1s;border:1.5px solid rgba(255,255,255,.28);position:relative;}
+.sbtn:active{transform:scale(.91);}
+.sbico{font-size:clamp(18px,4.8vw,25px);line-height:1;}
+.sblbl{font-size:clamp(6px,1.7vw,8px);font-weight:900;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);text-align:center;margin-top:1px;line-height:1.2;}
+.sbadge{position:absolute;top:-4px;right:-4px;background:#f44336;color:#fff;border-radius:50%;
+  width:13px;height:13px;font-size:8px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.pig-bar{width:clamp(30px,8vw,38px);background:rgba(0,0,0,.32);border-radius:8px;height:4px;margin-top:2px;overflow:hidden;}
+.pig-fill{height:100%;background:linear-gradient(90deg,#ff9800,#ffd700);border-radius:8px;transition:width .4s;}
+
+/* ── EVENT GAUGE — tall bar on right, fills per ring hit ── */
+#gift-col{
+  position:absolute;right:3px;z-index:52;
+  top:clamp(126px,17.5vh,146px);
+  bottom:clamp(98px,13.5vh,116px);
+  width:clamp(34px,9vw,42px);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.gift-ico{font-size:clamp(20px,5.5vw,26px);cursor:pointer;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5));}
+.gift-track{
+  flex:1;width:clamp(20px,5.5vw,26px);
+  background:rgba(0,0,0,.5);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  border:2px solid rgba(255,255,255,.3);
+  box-shadow:0 0 14px rgba(76,175,80,.35),inset 0 0 8px rgba(0,0,0,.3);
+  position:relative;
+}
+.gift-prog{
+  width:100%;
+  background:linear-gradient(180deg,#b9f6ca,#69f0ae 20%,#4caf50 60%,#1b5e20);
+  border-radius:12px;
+  transition:height .35s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 -3px 10px rgba(105,240,174,.6);
+}
+/* tick marks */
+.gauge-tick{
+  position:absolute;left:0;right:0;height:1px;
+  background:rgba(255,255,255,.2);pointer-events:none;
+}
+/* Event cards below gauge */
+#ev-cards{
+  position:absolute;right:2px;z-index:52;
+  bottom:clamp(98px,13.5vh,116px);
+  display:flex;flex-direction:column-reverse;gap:4px;align-items:flex-end;
+}
+.evc{
+  background:linear-gradient(135deg,rgba(10,10,30,.88),rgba(0,20,60,.88));
+  border:2px solid rgba(255,255,255,.2);border-radius:11px;
+  padding:4px 6px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  min-width:clamp(46px,12.5vw,58px);
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.evc:active{transform:scale(.93);}
+.evc.locked{opacity:.5;filter:grayscale(.5);}
+.evc.running{
+  border-color:#ffd700;
+  animation:evcPulse 1s ease-in-out infinite;
+  box-shadow:0 0 16px rgba(255,215,0,.55);
+}
+@keyframes evcPulse{0%,100%{box-shadow:0 0 10px rgba(255,215,0,.4)}50%{box-shadow:0 0 22px rgba(255,215,0,.75)}}
+.evc .evc-ico{font-size:clamp(17px,4.6vw,22px);line-height:1;}
+.evc .evc-lbl{font-family:'Fredoka One';font-size:clamp(6px,1.7vw,8px);color:#fff;line-height:1.15;text-align:center;}
+.evc .evc-time{font-family:'Fredoka One';font-size:clamp(9px,2.4vw,12px);color:#ffd700;line-height:1;}
+.evc .evc-lock{font-size:clamp(8px,2vw,10px);color:rgba(255,255,255,.45);margin-top:1px;}
+
+/* ── DOUBLE CHANCE ── */
+#dchance{position:absolute;right:2px;z-index:52;bottom:clamp(92px,12.2vh,106px);
+  background:linear-gradient(135deg,#1565c0,#42a5f5);border-radius:10px;
+  padding:4px 5px;text-align:center;border:2px solid #90caf9;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;}
+.dc-ico{font-size:clamp(15px,4.2vw,20px);}.dc-lbl{font-size:clamp(6px,1.7vw,8px);color:#fff;font-weight:900;line-height:1.2;}
+
+/* ── LANE BAR ── */
+#lane-bar{height:clamp(76px,10.5vh,94px);display:flex;flex-shrink:0;z-index:30;position:relative;}
+.lane{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:clamp(4px,.7vh,6px);position:relative;}
+.lane-bg{position:absolute;inset:0;border-radius:28px 28px 0 0;border-top:2px solid rgba(255,255,255,.38);}
+.lane-ico{font-size:clamp(12px,3.2vw,17px);position:relative;z-index:1;}
+.lane-val{font-family:'Fredoka One';font-size:clamp(8px,2.3vw,12px);color:#fff;
+  text-shadow:1px 1px 3px rgba(0,0,0,.75);position:relative;z-index:1;}
+.lane-hole{width:clamp(26px,7vw,36px);height:clamp(9px,1.3vh,12px);background:rgba(0,0,0,.58);
+  border-radius:50%;position:relative;z-index:1;margin-top:2px;}
+
+/* ── TOAST ── */
+#tz{position:absolute;bottom:clamp(88px,12vh,104px);left:50%;transform:translateX(-50%);
+  z-index:200;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;width:90%;}
+.toast{background:rgba(0,0,0,.9);color:#fff;border-radius:15px;padding:5px 13px;
+  font-weight:800;font-size:clamp(10px,2.6vw,12px);text-align:center;
+  animation:tIn .3s ease,tOut .4s ease 2.4s forwards;}
+@keyframes tIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tOut{to{opacity:0}}
+
+/* ── SCORE POPS ── */
+.spop{position:absolute;pointer-events:none;z-index:65;font-family:'Fredoka One';
+  font-size:clamp(12px,3.3vw,16px);text-shadow:1px 1px 0 rgba(0,0,0,.6);
+  animation:spFloat 1.1s ease forwards;}
+@keyframes spFloat{0%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-48px) scale(.8)}}
+.fpop{position:absolute;pointer-events:none;z-index:75;font-size:clamp(26px,7vw,38px);
+  animation:fpAnim 1.2s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes fpAnim{0%{transform:scale(0);opacity:1}55%{transform:scale(1.4) translateY(-18px);opacity:1}100%{transform:scale(.5) translateY(-65px);opacity:0}}
+/* Frenzy text */
+.frenzy-text{position:absolute;pointer-events:none;z-index:78;font-family:'Fredoka One';
+  font-size:clamp(28px,7.5vw,40px);color:#ffd700;left:50%;transform:translateX(-50%);
+  text-shadow:3px 3px 0 #e65100,0 0 25px #ff9800;
+  animation:frenzyPop .6s cubic-bezier(.34,1.56,.64,1),frenzyFade .4s ease 1.8s forwards;}
+@keyframes frenzyPop{from{transform:translateX(-50%) scale(.2) rotate(-10deg);opacity:0}to{transform:translateX(-50%) scale(1) rotate(0deg);opacity:1}}
+@keyframes frenzyFade{to{opacity:0}}
+
+/* ── OVERLAYS ── */
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.7);z-index:110;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .22s;backdrop-filter:blur(6px);}
+.ov.show{opacity:1;pointer-events:all;}
+.mcard{background:#fffde7;border-radius:20px;width:92%;max-height:86%;overflow-y:auto;
+  padding:0 0 16px;box-shadow:0 18px 50px rgba(0,0,0,.75);transform:translateY(22px);transition:transform .22s;}
+.ov.show .mcard{transform:translateY(0);}
+.mhdr{padding:11px 13px;border-radius:20px 20px 0 0;display:flex;align-items:center;gap:7px;}
+.mhdr h2{font-family:'Fredoka One';font-size:clamp(14px,4vw,18px);color:#fff;flex:1;}
+.mcls{font-size:19px;cursor:pointer;color:rgba(255,255,255,.85);padding:4px;}
+.mbody{padding:10px 11px 0;}
+
+/* ── FISH GRID ── */
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(4px,1.1vw,6px);}
+.fcell{aspect-ratio:1;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(18px,4.8vw,25px);position:relative;
+  background:linear-gradient(135deg,#ffe0b2,#ffcc80);border:2px solid #ffb74d;}
+.fcell.locked{background:#ddd;border-color:#bbb;filter:grayscale(1);opacity:.5;}
+.fcell.got{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-color:#42a5f5;box-shadow:0 0 8px rgba(66,165,245,.4);}
+.fcell .fnum{position:absolute;bottom:1px;right:2px;font-size:7px;font-weight:900;color:rgba(0,0,0,.28);}
+.fcell .ftick{position:absolute;top:-5px;right:-5px;background:#4caf50;color:#fff;font-size:8px;
+  border-radius:50%;width:13px;height:13px;display:flex;align-items:center;justify-content:center;}
+.fcell .fcnt{position:absolute;top:-4px;left:-4px;background:#f44336;color:#fff;font-size:8px;
+  font-weight:900;border-radius:10px;padding:0 4px;min-width:13px;text-align:center;}
+
+/* ── PRIZES PAGE — fidèle à l'image ── */
+.prizes-screen{position:absolute;inset:0;z-index:115;background:#f5e0ff;display:none;overflow-y:auto;}
+.prizes-banner{width:100%;height:clamp(130px,18vh,180px);background:linear-gradient(135deg,#7b1fa2,#c084fc,#9c27b0);
+  position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.prizes-banner-decor{position:absolute;font-size:clamp(30px,8vw,45px);opacity:.25;}
+.prizes-nav{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;}
+.prizes-nav-btn{background:rgba(255,255,255,.3);border:none;border-radius:50%;width:34px;height:34px;
+  font-size:16px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.prizes-section{margin:10px;background:linear-gradient(135deg,#d8b4fe,#c084fc);
+  border-radius:16px;padding:12px;border:2px solid #a855f7;}
+.prizes-section-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#7c3aed;
+  text-align:center;margin-bottom:10px;}
+.prizes-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+.prize-item{background:#fff;border-radius:12px;padding:8px;text-align:center;cursor:pointer;
+  border:2px solid #e9d5ff;transition:transform .15s;}
+.prize-item:active{transform:scale(.96);}
+.prize-item-img{font-size:clamp(28px,7.5vw,40px);margin-bottom:4px;display:block;}
+.prize-item-name{font-family:'Fredoka One';font-size:clamp(10px,2.7vw,13px);color:#333;margin-bottom:4px;}
+.prize-item-bar{background:#1a0030;border-radius:8px;padding:3px 6px;
+  font-family:'Fredoka One';font-size:clamp(9px,2.4vw,11px);color:#fff;}
+.prizes-delivery{text-align:center;font-family:'Fredoka One';font-size:clamp(12px,3.2vw,14px);
+  color:#7c3aed;margin-top:6px;cursor:pointer;}
+/* Puzzle Bulle */
+.puzzle-section{margin:10px;background:linear-gradient(135deg,#9333ea,#7c3aed);
+  border-radius:16px;padding:12px;}
+.puzzle-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#ffd700;text-align:center;margin-bottom:10px;}
+.puzzle-bg{background:rgba(0,0,0,.2);border-radius:12px;padding:12px;}
+.puzzle-bubbles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.bubble-item{position:relative;width:clamp(70px,18vw,88px);height:clamp(70px,18vw,88px);
+  border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.6),rgba(200,180,255,.3));
+  border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;
+  flex-direction:column;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.3);}
+.bubble-item .bi-ico{font-size:clamp(22px,6vw,30px);}
+.bubble-btn{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#ffd700,#ff9800);border:none;border-radius:20px;
+  padding:3px 8px;font-family:'Fredoka One';font-size:clamp(8px,2.2vw,10px);color:#000;
+  cursor:pointer;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.prizes-back{display:block;width:calc(100% - 20px);margin:10px auto 0;padding:12px;
+  border-radius:16px;border:none;background:linear-gradient(135deg,#7c3aed,#9333ea);
+  font-family:'Fredoka One';font-size:clamp(15px,4vw,18px);color:#fff;cursor:pointer;}
+
+/* ── CASHOUT ── */
+#co-screen{position:absolute;inset:0;background:#f5e6b0;z-index:130;display:none;overflow-y:auto;}
+.co-hdr{background:linear-gradient(135deg,#9c27b0,#673ab7);padding:11px;
+  display:flex;align-items:center;gap:9px;position:sticky;top:0;z-index:4;}
+.co-back{font-size:22px;cursor:pointer;}
+.co-hdr h1{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#fff;}
+.co-tabs{display:flex;background:#f3e5f5;border-bottom:2px solid #ce93d8;position:sticky;top:46px;z-index:3;}
+.co-tab{flex:1;padding:9px;text-align:center;font-weight:800;font-size:clamp(10px,2.6vw,12px);color:#7b1fa2;cursor:pointer;}
+.co-tab.active{background:#fff;border-bottom:3px solid #9c27b0;color:#4a148c;}
+.co-methods{display:flex;gap:5px;padding:9px;flex-wrap:wrap;}
+.pmeth{flex:1;min-width:clamp(60px,16vw,85px);border:2.5px solid #e0e0e0;border-radius:11px;
+  padding:8px 4px;text-align:center;cursor:pointer;background:#fff;
+  font-weight:900;font-size:clamp(9px,2.4vw,11px);transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:3px;}
+.pmeth.active{border-color:#4caf50;background:#e8f5e9;}
+.wlbl{font-weight:900;font-size:clamp(10px,2.6vw,12px);color:#4a148c;padding:0 9px 4px;}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 9px 9px;}
+.wcard{border-radius:13px;padding:10px;cursor:pointer;transition:transform .15s;box-shadow:0 4px 0 rgba(0,0,0,.22);}
+.wcard:active{transform:scale(.96);}
+.wc-logo{font-size:9px;color:rgba(255,255,255,.65);font-weight:700;margin-bottom:2px;}
+.wc-amt{font-family:'Fredoka One';font-size:clamp(17px,4.8vw,22px);color:#fff;line-height:1;}
+.wc-req{font-size:clamp(8px,2vw,10px);color:rgba(255,255,255,.8);margin-top:2px;}
+.wc-bar{background:rgba(0,0,0,.2);border-radius:5px;height:5px;margin-top:4px;overflow:hidden;}
+.wc-fill{height:100%;border-radius:5px;background:#fff;transition:width .5s;}
+.wc-val{font-size:clamp(8px,2vw,9px);color:rgba(255,255,255,.88);margin-top:2px;font-weight:700;}
+#tab-res-c .iw-section{display:none;background:linear-gradient(135deg,#1a237e,#283593);
+  margin:10px;border-radius:14px;padding:14px;text-align:center;}
+#tab-res-c .iw-section.show{display:block;}
+.iw-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#ffd700;margin-bottom:5px;}
+.iw-sub{font-size:clamp(10px,2.5vw,12px);color:rgba(255,255,255,.7);margin-bottom:9px;line-height:1.5;}
+.iw-token-row{display:flex;justify-content:center;gap:7px;margin-bottom:9px;}
+.iw-tok{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);
+  border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.iw-tok.owned{background:rgba(255,215,0,.25);border-color:#ffd700;}
+.iw-btn{width:100%;padding:10px;border-radius:14px;border:none;font-family:'Fredoka One';
+  font-size:clamp(14px,3.8vw,17px);cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3);margin-top:5px;}
+.iw-btn.gold{background:linear-gradient(135deg,#ffd700,#ff9800);color:#000;}
+.iw-btn.grey{background:linear-gradient(135deg,#546e7a,#37474f);color:#fff;}
+.iw-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── STEP REVEAL ── */
+#step-ov{position:absolute;inset:0;background:rgba(0,0,0,.92);z-index:140;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:22px;}
+.step-em{font-size:clamp(50px,13.5vw,74px);animation:stPop .5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes stPop{from{transform:scale(0) rotate(-18deg)}to{transform:scale(1) rotate(0)}}
+.step-ti{font-family:'Fredoka One';font-size:clamp(17px,4.8vw,23px);color:#ffd700;margin:10px 0 5px;text-shadow:0 0 16px #ff9800;}
+.step-ds{font-size:clamp(11px,2.8vw,13px);color:#fffde7;line-height:1.6;max-width:272px;white-space:pre-line;}
+.step-ok{margin-top:13px;background:linear-gradient(135deg,#4caf50,#2e7d32);border:none;
+  border-radius:24px;padding:11px 32px;font-family:'Fredoka One';
+  font-size:clamp(15px,4vw,18px);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3);}
+
+/* ── UPGRADE MODAL ── */
+#upgrade-ov{position:absolute;inset:0;background:rgba(0,0,0,.72);z-index:120;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.upg-card{background:linear-gradient(180deg,#9333ea,#7c3aed);border-radius:24px;
+  width:88%;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.7);}
+.upg-header{padding:14px 16px 10px;display:flex;align-items:center;justify-content:center;position:relative;}
+.upg-title{font-family:'Fredoka One';font-size:clamp(18px,5vw,22px);color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.3);}
+.upg-xbtn{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.3);border:none;border-radius:50%;
+  width:28px;height:28px;font-size:14px;color:#fff;cursor:pointer;}
+.upg-body{background:#fffde7;padding:12px 16px 16px;}
+.upg-lv-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.upg-lv-badge{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-family:'Fredoka One';
+  font-size:clamp(14px,4vw,18px);border-radius:12px;padding:4px 10px;flex-shrink:0;}
+.upg-lv-bar-wrap{flex:1;background:#e0e0e0;border-radius:10px;height:12px;overflow:hidden;}
+.upg-lv-fill{height:100%;background:linear-gradient(90deg,#a855f7,#7c3aed);border-radius:10px;transition:width .4s;}
+.upg-lv-ratio{font-family:'Fredoka One';font-size:clamp(11px,3vw,13px);color:#7c3aed;flex-shrink:0;}
+.upg-subtitle{font-family:'Fredoka One';font-size:clamp(12px,3.2vw,14px);color:#7c3aed;text-align:center;margin-bottom:10px;}
+.upg-box-anim{background:linear-gradient(135deg,#d8b4fe,#c084fc);border-radius:14px;padding:14px;text-align:center;margin-bottom:12px;}
+.upg-balloons{font-size:clamp(24px,6.5vw,32px);line-height:1.4;animation:balloonBob 2s ease-in-out infinite;}
+@keyframes balloonBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.upg-box-label{font-family:'Fredoka One';font-size:clamp(15px,4.2vw,19px);color:#fff;
+  text-shadow:1px 1px 3px rgba(0,0,0,.3);margin-top:6px;}
+.upg-ad-btn{width:100%;padding:14px;border-radius:30px;border:none;
+  background:linear-gradient(135deg,#4caf50,#2e7d32);
+  font-family:'Fredoka One';font-size:clamp(17px,4.8vw,21px);color:#fff;cursor:pointer;
+  box-shadow:0 5px 0 #1b5e20;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.upg-ad-btn:active{transform:scale(.97);}
+.upg-ad-tag{background:#fff;color:#4caf50;border-radius:6px;padding:2px 8px;font-size:13px;font-weight:900;}
+
+/* ── PIG SMASH ── */
+#pig-ov{position:absolute;inset:0;background:rgba(255,215,0,.93);z-index:135;display:none;align-items:center;justify-content:center;}
+.pigcard{text-align:center;padding:18px;}
+.pig-an{font-size:clamp(62px,16vw,88px);display:block;animation:pigWb .5s ease-in-out infinite alternate;}
+@keyframes pigWb{from{transform:rotate(-10deg)}to{transform:rotate(10deg) scale(1.06)}}
+.pig-ti{font-family:'Fredoka One';font-size:clamp(17px,4.8vw,23px);color:#b71c1c;margin:7px 0 2px;}
+.pig-sub{font-size:clamp(10px,2.8vw,12px);color:#4a148c;font-weight:700;margin-bottom:10px;}
+.pig-btn{padding:11px 34px;border-radius:32px;border:none;background:linear-gradient(135deg,#4caf50,#1b5e20);
+  font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3);}
+.pig-cls{background:none;border:none;color:#555;font-size:clamp(10px,2.8vw,12px);cursor:pointer;margin-top:8px;display:block;}
+
+/* ── FISH HELP ── */
+#fhelp-ov{position:absolute;inset:0;background:rgba(0,40,90,.87);z-index:145;display:none;align-items:center;justify-content:center;}
+.fhcard{background:#fffde7;border-radius:19px;width:90%;padding:14px;text-align:center;}
+.fhcard h2{font-family:'Fredoka One';font-size:clamp(15px,4.2vw,19px);color:#e65100;margin-bottom:4px;}
+.fhcard p{font-size:clamp(10px,2.5vw,12px);color:#666;margin-bottom:7px;}
+.frlist{display:flex;flex-direction:column;gap:5px;margin:5px 0;}
+.fritem{display:flex;align-items:center;gap:7px;background:#fff3e0;border-radius:9px;padding:7px;border-left:3px solid #ff9800;}
+.fie{font-size:clamp(17px,4.6vw,22px);}.fin{text-align:left;}
+.fr-nm{font-weight:900;font-size:clamp(10px,2.5vw,12px);color:#e65100;}
+.fr-od{font-size:clamp(9px,2.2vw,11px);color:#888;}
+.fhbtn{width:100%;padding:9px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#ff9800,#e65100);font-family:'Fredoka One';
+  font-size:clamp(13px,3.7vw,16px);color:#fff;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3);margin-top:5px;}
+.fhbtn.sec{background:linear-gradient(135deg,#78909c,#455a64);}
+
+/* ── DAILY ── */
+#daily-ov{position:absolute;inset:0;background:rgba(0,0,0,.74);z-index:112;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.daily-card{background:linear-gradient(135deg,#1a237e,#283593);border-radius:19px;width:90%;padding:15px;text-align:center;}
+.daily-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#ffd700;margin-bottom:9px;}
+.daily-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:9px;}
+.dday{border-radius:9px;padding:6px 3px;text-align:center;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.18);}
+.dday.done{background:rgba(76,175,80,.3);border-color:#4caf50;}
+.dday.today{background:rgba(255,215,0,.3);border-color:#ffd700;animation:dayPulse 1.5s ease-in-out infinite;}
+@keyframes dayPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.dday .dico{font-size:clamp(17px,4.6vw,24px);}
+.dday .dtxt{font-size:clamp(6.5px,1.8vw,8.5px);color:rgba(255,255,255,.78);font-weight:800;margin-top:1px;}
+.dday .dval{font-family:'Fredoka One';font-size:clamp(7.5px,2vw,9.5px);color:#ffd700;}
+.daily-btn{width:100%;padding:10px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#ffd700,#ff9800);font-family:'Fredoka One';
+  font-size:clamp(14px,3.8vw,17px);color:#000;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3);}
+.daily-btn:disabled{opacity:.45;cursor:not-allowed;}
+.daily-cls{background:none;border:none;color:rgba(255,255,255,.55);font-size:clamp(10px,2.6vw,12px);cursor:pointer;margin-top:7px;display:block;}
+
+/* ── LUCKY ── */
+#lucky-ov{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:112;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.lucky-card{background:linear-gradient(135deg,#1b0040,#3a0080);border-radius:19px;width:90%;padding:15px;text-align:center;}
+.lucky-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#ffd700;margin-bottom:2px;}
+.lucky-sub{font-size:clamp(10px,2.5vw,12px);color:rgba(255,255,255,.6);margin-bottom:6px;}
+.lucky-cd{font-family:'Fredoka One';font-size:clamp(22px,6vw,28px);color:#ffd700;margin:4px 0;}
+.lucky-info{background:rgba(255,255,255,.08);border-radius:10px;padding:8px;margin-bottom:9px;
+  font-size:clamp(10px,2.5vw,12px);color:rgba(255,255,255,.75);line-height:1.5;}
+.lucky-btn{width:100%;padding:10px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#ffd700,#ff9800);font-family:'Fredoka One';
+  font-size:clamp(14px,3.8vw,17px);color:#000;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3);}
+.lucky-btn:disabled{opacity:.4;cursor:not-allowed;}
+.lucky-cls{background:none;border:none;color:rgba(255,255,255,.55);font-size:clamp(10px,2.6vw,12px);cursor:pointer;margin-top:7px;display:block;}
+
+/* ── RECOMP ── */
+#recomp-ov{position:absolute;inset:0;background:rgba(0,0,0,.72);z-index:112;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.recomp-card{background:linear-gradient(135deg,#1b4020,#2e7d32);border-radius:19px;width:90%;padding:14px;}
+.recomp-title{font-family:'Fredoka One';font-size:clamp(16px,4.5vw,20px);color:#ffd700;margin-bottom:9px;text-align:center;}
+.recomp-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.ri{background:rgba(255,255,255,.12);border-radius:11px;padding:8px;display:flex;align-items:center;gap:8px;}
+.ri-ico{font-size:clamp(20px,5.5vw,28px);flex-shrink:0;}
+.ri-info{flex:1;}.ri-name{font-family:'Fredoka One';font-size:clamp(11px,3vw,13px);color:#fff;}
+.ri-desc{font-size:clamp(9px,2.2vw,11px);color:rgba(255,255,255,.65);}
+.ri-btn{background:linear-gradient(135deg,#ffd700,#ff9800);border:none;border-radius:9px;
+  padding:5px 9px;font-family:'Fredoka One';font-size:clamp(10px,2.6vw,12px);color:#000;cursor:pointer;flex-shrink:0;}
+.recomp-cls{background:none;border:none;color:rgba(255,255,255,.55);font-size:clamp(10px,2.6vw,12px);cursor:pointer;text-align:center;display:block;}
+
+/* ── SKIN / BG SHOP ── */
+#shop-ov{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:112;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.shop-card{background:linear-gradient(135deg,#0d2040,#0a3060);border-radius:20px;width:90%;padding:16px;max-height:85vh;overflow-y:auto;}
+.shop-title{font-family:'Fredoka One';font-size:clamp(17px,4.8vw,21px);color:#ffd700;margin-bottom:10px;text-align:center;}
+.shop-section{margin-bottom:12px;}
+.shop-section-title{font-family:'Fredoka One';font-size:clamp(13px,3.5vw,15px);color:rgba(255,255,255,.8);margin-bottom:7px;}
+.shop-items{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.shop-item{background:rgba(255,255,255,.1);border-radius:12px;padding:8px;text-align:center;cursor:pointer;
+  border:2px solid rgba(255,255,255,.15);transition:all .2s;}
+.shop-item:active{transform:scale(.96);}
+.shop-item.owned{border-color:#4caf50;background:rgba(76,175,80,.2);}
+.shop-item.active{border-color:#ffd700;background:rgba(255,215,0,.15);}
+.shop-item .si-ico{font-size:clamp(22px,6vw,28px);}
+.shop-item .si-name{font-size:clamp(9px,2.3vw,11px);color:#fff;font-weight:700;margin-top:3px;}
+.shop-item .si-cost{font-size:clamp(9px,2.3vw,10px);color:#ffd700;font-weight:900;margin-top:2px;}
+.shop-item .si-tag{font-size:clamp(8px,2vw,9px);color:#4caf50;font-weight:900;}
+.shop-cls{background:none;border:none;color:rgba(255,255,255,.55);font-size:clamp(11px,2.8vw,13px);cursor:pointer;display:block;margin:4px auto 0;}
+
+.fslot{width:clamp(34px,9vw,44px);height:clamp(34px,9vw,44px);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,3.8vw,18px);border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);}
+.fslot.revealed{background:rgba(76,175,80,.25);border-color:#4caf50;}
+.fslot.empty-frag{background:rgba(244,67,54,.18);border-color:#f44336;}
+.fslot.unknown{background:rgba(255,193,7,.1);border-color:#ffc107;}
+</style>
+</head>
+<body>
+<div id="app" class="bg-ocean">
+<div class="bg-flower f1">🌸</div><div class="bg-flower f2">🌺</div>
+<div id="rain-overlay"></div>
+<div id="jflash"></div>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div class="hpill"><span class="hi">💵</span><span class="hv" id="hvE">0,00</span></div>
+  <div id="btn-esp" onclick="openCashout()">ESPÈCES DEHORS</div>
+  <div class="hpill gold"><span class="hi">🪙</span><span class="hv" id="hvC">0</span></div>
+  <div class="hpill pur"><span class="hi">🧩</span><span class="hv" id="hvF">0</span></div>
+  <div class="hgear" onclick="openShop()">🎨</div>
+</div>
+
+<!-- INFO ROW -->
+<div id="irow">
+  <div id="fish-pill" onclick="openFish()"><span class="fpico">🐟</span><span class="fpv" id="fpv">0/36</span></div>
+  <div id="slot-wrap" onclick="doSpin()">
+    <div class="sbox" id="sb0">?</div><div class="sbox" id="sb1">?</div><div class="sbox" id="sb2">?</div>
+    <div id="slot-badge">3</div>
+  </div>
+  <div id="balls-pill">
+    <span class="bsm"></span>
+    <span class="bvtxt" id="bvtxt">32/50</span>
+    <button id="balls-plus" onclick="openUpgrade()">+</button>
+  </div>
+</div>
+<div id="next-ball"></div>
+
+<!-- CHARACTER — swimmer in swimsuit -->
+<div id="char">🏊</div>
+<div id="ev-banner"></div>
+
+<!-- SIDE BUTTONS -->
+<div id="sl">
+  <div class="sbtn" onclick="openPig()">
+    <span class="sbico">🐷</span>
+    <div class="pig-bar"><div class="pig-fill" id="pigFill" style="width:0%"></div></div>
+    <span class="sblbl">Lv.<span id="pigLvTxt">0</span></span>
+  </div>
+  <div class="sbtn" onclick="openDaily()">
+    <span class="sbico">📅</span>
+    <div class="sbadge" id="daily-badge">!</div>
+    <span class="sblbl">S'IDENTIFIER</span>
+  </div>
+  <div class="sbtn" onclick="openDaily()">
+    <span class="sbico">🎱</span><span class="sblbl">QUOTIDIEN</span>
+  </div>
+  <div class="sbtn" onclick="openLucky()">
+    <span class="sbico">🎰</span><span class="sblbl">LUCKY CHANCE</span>
+  </div>
+  <div class="sbtn" onclick="openRecomp()">
+    <span class="sbico">🔨</span><span class="sblbl">Récompense</span>
+  </div>
+  <div class="sbtn" onclick="openPrizes()">
+    <span class="sbico">🎁</span><span class="sblbl">Cadeaux</span>
+  </div>
+</div>
+
+<!-- EVENT GAUGE -->
+<div id="gift-col">
+  <div class="gift-ico" onclick="openPig()">🎁</div>
+  <div class="gift-track">
+    <div class="gauge-tick" style="bottom:75%"></div>
+    <div class="gauge-tick" style="bottom:50%"></div>
+    <div class="gauge-tick" style="bottom:25%"></div>
+    <div class="gift-prog" id="giftProg" style="height:15%"></div>
+  </div>
+</div>
+<!-- EVENT CARDS (below gauge, filled by pub or gauge) -->
+<div id="ev-cards"></div>
+
+<!-- DOUBLE CHANCE -->
+<div id="dchance" onclick="toggleDouble()">
+  <div class="dc-ico">⚪</div><div class="dc-lbl">DOUBLE<br>CHANCE</div>
+</div>
+
+<!-- CANVAS -->
+<div id="cw"><canvas id="gc"></canvas></div>
+
+<!-- LANE BAR -->
+<div id="lane-bar"></div>
+
+<!-- TOAST -->
+<div id="tz"></div>
+
+<!-- ════ FISH OVERLAY ════ -->
+<div class="ov" id="fish-ov">
+  <div class="mcard">
+    <div class="mhdr" style="background:linear-gradient(135deg,#0277bd,#01579b)">
+      <span style="font-size:20px">🐟</span><h2>COLLECTION OCÉAN</h2>
+      <span class="mcls" onclick="closeOv('fish-ov')">✕</span>
+    </div>
+    <div class="mbody">
+      <div style="background:#e3f2fd;border-radius:9px;padding:7px;margin-bottom:8px;text-align:center">
+        <div style="font-family:'Fredoka One';font-size:13px;color:#0277bd" id="fishProgLbl">0/36</div>
+        <div style="font-size:11px;color:#666;margin-top:1px">36 espèces — plusieurs exemplaires possibles !</div>
+      </div>
+      <div class="fgrid" id="fgrid"></div>
+      <div id="fish-help-hint" style="display:none;margin-top:8px;background:#fff8e1;border-radius:9px;
+        padding:7px;font-size:11px;color:#e65100;font-weight:800;text-align:center;cursor:pointer"
+        onclick="openFishHelp()">🎣 Tu bloques ? Aide à la pêche →</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIZES SCREEN -->
+<div class="prizes-screen" id="prizes-screen">
+  <div class="prizes-banner">
+    <div class="prizes-banner-decor" style="left:5%">📱</div>
+    <div class="prizes-banner-decor" style="left:25%">🎧</div>
+    <div class="prizes-banner-decor" style="right:20%">💻</div>
+    <div class="prizes-banner-decor" style="right:5%">📱</div>
+    <div class="prizes-nav">
+      <button class="prizes-nav-btn" onclick="closePrizes()">‹</button>
+      <button class="prizes-nav-btn" onclick="openAddressForm()">✏️</button>
+    </div>
+  </div>
+  <div id="addr-form" style="display:none;margin:10px;background:#fff;border-radius:14px;padding:14px;">
+    <div style="font-family:'Fredoka One';font-size:15px;color:#7c3aed;margin-bottom:8px;">📦 Adresse de livraison</div>
+    <input id="addr-name" type="text" placeholder="Nom complet" style="width:100%;margin-bottom:6px;padding:8px 10px;border-radius:9px;border:1.5px solid #d8b4fe;font-size:13px;box-sizing:border-box;">
+    <input id="addr-street" type="text" placeholder="Rue, numéro" style="width:100%;margin-bottom:6px;padding:8px 10px;border-radius:9px;border:1.5px solid #d8b4fe;font-size:13px;box-sizing:border-box;">
+    <input id="addr-city" type="text" placeholder="Ville" style="width:100%;margin-bottom:6px;padding:8px 10px;border-radius:9px;border:1.5px solid #d8b4fe;font-size:13px;box-sizing:border-box;">
+    <input id="addr-zip" type="text" placeholder="Code postal" style="width:100%;margin-bottom:6px;padding:8px 10px;border-radius:9px;border:1.5px solid #d8b4fe;font-size:13px;box-sizing:border-box;">
+    <input id="addr-country" type="text" placeholder="Pays" style="width:100%;margin-bottom:10px;padding:8px 10px;border-radius:9px;border:1.5px solid #d8b4fe;font-size:13px;box-sizing:border-box;">
+    <div style="display:flex;gap:8px;">
+      <button onclick="saveAddress()" style="flex:1;padding:10px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;font-family:'Fredoka One';font-size:14px;cursor:pointer;">💾 Sauvegarder</button>
+      <button onclick="document.getElementById('addr-form').style.display='none'" style="flex:1;padding:10px;border-radius:12px;border:none;background:#e5e7eb;color:#555;font-family:'Fredoka One';font-size:14px;cursor:pointer;">Annuler</button>
+    </div>
+    <div id="addr-saved-display" style="margin-top:6px;font-size:11px;color:#7c3aed;"></div>
+  </div>
+  <div class="prizes-section">
+    <div class="prizes-section-title">🎁 Cadeaux — Fragments</div>
+    <div class="prizes-grid3" id="prizes-grid3"></div>
+  </div>
+  <div id="prize-claim-box" style="display:none;margin:0 10px 10px;background:linear-gradient(135deg,#1a0040,#3a0080);border-radius:16px;padding:14px;color:#fff;">
+    <div id="pcb-title" style="font-family:'Fredoka One';font-size:16px;color:#ffd700;margin-bottom:8px;text-align:center;"></div>
+    <div id="pcb-slots" style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:10px;"></div>
+    <div id="pcb-info" style="font-size:11px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:10px;"></div>
+    <button id="pcb-btn" style="width:100%;padding:11px;border-radius:14px;border:none;background:linear-gradient(135deg,#ffd700,#ff9800);font-family:'Fredoka One';font-size:15px;color:#000;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3);">📺 Pub → Fragment</button>
+    <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;margin-top:4px;">(AdSense bientôt)</div>
+    <button onclick="document.getElementById('prize-claim-box').style.display='none'" style="display:block;margin:8px auto 0;background:none;border:none;color:rgba(255,255,255,.45);font-size:11px;cursor:pointer;">Fermer</button>
+  </div>
+  <button class="prizes-back" onclick="closePrizes()">← Retour au jeu</button>
+</div>
+<!-- ════ CASHOUT SCREEN ════ -->
+<div id="co-screen">
+  <div class="co-hdr">
+    <span class="co-back" onclick="closeCashout()">⬅️</span>
+    <div><h1>Encaissement</h1><div style="font-size:11px;color:#ce93d8">💵 Retire tes gains</div></div>
+  </div>
+  <div class="co-tabs">
+    <div class="co-tab active" id="tab-co" onclick="switchTab('co')">Encaissement</div>
+    <div class="co-tab" id="tab-res" onclick="switchTab('res')">Résultat</div>
+  </div>
+  <div id="tab-co-c">
+    <div style="padding:9px 9px 4px;font-weight:900;font-size:11px;color:#4a148c">Méthode de retrait</div>
+    <div class="co-methods">
+      <div class="pmeth active" id="pm-paypal" onclick="setPay('paypal')">
+        <svg width="50" height="14" viewBox="0 0 124 33" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#003087" d="M12.2 2.5h-8C3.6 2.5 3 3 2.9 3.6L0 22.4c-.1.5.3.9.8.9h4c.6 0 1-.4 1.1-1l.8-5c.1-.6.6-1 1.1-1h2.5c5.2 0 8.2-2.5 9-7.5.3-2.2 0-3.9-1-5.1-1.1-1.3-3-2.2-5.9-2.2z"/><path fill="#009cde" d="M13.1 9.7c-.4 2.8-2.5 2.8-4.5 2.8H7.5l.8-5.1c0-.3.3-.5.6-.5h.5c1.4 0 2.7 0 3.3.8.4.5.5 1.2.4 2z"/><path fill="#003087" d="M35.2 9.6h-4c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.9-1.3-2.8-1.7-4.7-1.7-4.4 0-8.2 3.3-8.9 8-.4 2.3.2 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.6 0 5.6-2.3 5.6-2.3l-.2 1c-.1.5.3.9.8.9h3.6c.6 0 1-.4 1.1-1L36 10.5c.2-.4-.2-.9-.8-.9zm-5.2 8.1c-.4 2.2-2.2 3.7-4.4 3.7-1.1 0-2-.4-2.6-1-.6-.7-.8-1.7-.6-2.7.4-2.2 2.2-3.7 4.4-3.7 1.1 0 2 .4 2.6 1 .6.6.8 1.6.6 2.7z"/><path fill="#009cde" d="M55.1 9.6h-4c-.4 0-.7.2-.9.5l-5.3 7.8-2.2-7.5c-.1-.5-.6-.8-1-.8h-3.9c-.5 0-.9.5-.8 1l4.2 12.3-4 5.6c-.4.5 0 1.2.6 1.2h4c.4 0 .7-.2.9-.5l12.7-18.4c.4-.4.1-1.2-.3-1.2z"/><path fill="#003087" d="M67.5 2.5h-8c-.6 0-1.1.4-1.2 1l-2.9 18.8c-.1.5.3.9.8.9h4.3c.4 0 .7-.3.8-.7l.8-5.3c.1-.6.6-1 1.1-1h2.5c5.2 0 8.2-2.5 9-7.5.3-2.2 0-3.9-1-5.1-1.1-1.3-3-2.1-6.2-2.1z"/><path fill="#009cde" d="M68.4 9.7c-.4 2.8-2.5 2.8-4.5 2.8h-1.1l.8-5.1c0-.3.3-.5.6-.5h.5c1.4 0 2.7 0 3.3.8.4.5.5 1.2.4 2z"/><path fill="#003087" d="M90.5 9.6h-4c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.9-1.3-2.8-1.7-4.7-1.7-4.4 0-8.2 3.3-8.9 8-.4 2.3.2 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.6 0 5.6-2.3 5.6-2.3l-.2 1c-.1.5.3.9.8.9h3.6c.6 0 1-.4 1.1-1L91.3 10.5c.2-.4-.2-.9-.8-.9zm-5.2 8.1c-.4 2.2-2.2 3.7-4.4 3.7-1.1 0-2-.4-2.6-1-.6-.7-.8-1.7-.6-2.7.4-2.2 2.2-3.7 4.4-3.7 1.1 0 2 .4 2.6 1 .6.6.8 1.6.6 2.7z"/><path fill="#009cde" d="M95.1 3.1l-3 19.3c-.1.5.3.9.8.9h3.5c.6 0 1.1-.4 1.2-1L100.5 3c.1-.5-.3-.9-.8-.9h-3.8c-.4 0-.7.3-.8 1z"/>
+        </svg><span>PayPal</span>
+      </div>
+      <div class="pmeth" id="pm-revolut" onclick="setPay('revolut')">
+        <svg width="50" height="14" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="26" rx="4" fill="#0075eb"/><text x="8" y="18" font-family="Arial" font-weight="900" font-size="14" fill="white">Revolut</text></svg><span>Revolut</span>
+      </div>
+      <div class="pmeth" id="pm-lydia" onclick="setPay('lydia')">
+        <svg width="50" height="14" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="26" rx="4" fill="#8b5cf6"/><text x="14" y="18" font-family="Arial" font-weight="900" font-size="14" fill="white">Lydia</text></svg><span>Lydia</span>
+      </div>
+      <div class="pmeth" id="pm-paylib" onclick="setPay('paylib')">
+        <svg width="50" height="14" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="26" rx="4" fill="#00a859"/><text x="8" y="18" font-family="Arial" font-weight="900" font-size="14" fill="white">Paylib</text></svg><span>Paylib</span>
+      </div>
+    </div>
+    <!-- Handle input selon méthode -->
+    <div id="pay-handle-section" style="margin:0 9px 8px;background:#f3e5f5;border-radius:11px;padding:10px;">
+      <div id="pay-handle-label" style="font-size:11px;font-weight:900;color:#6a1b9a;margin-bottom:5px;">💳 Ton lien PayPal.me</div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span id="pay-handle-prefix" style="font-size:12px;color:#888;font-weight:700;white-space:nowrap;">paypal.me/</span>
+        <input id="pay-handle-input" type="text" placeholder="ton_pseudo"
+          style="flex:1;padding:7px 10px;border-radius:9px;border:1.5px solid #ce93d8;font-size:13px;font-weight:700;box-sizing:border-box;"
+          oninput="savePayHandle()">
+      </div>
+      <div id="pay-handle-saved" style="font-size:10px;color:#7c3aed;margin-top:4px;"></div>
+    </div>
+    <div class="wlbl">Tâche de retrait</div>
+    <div class="wgrid" id="wgrid"></div>
+  </div>
+  <div id="tab-res-c" style="display:none;padding:12px">
+    <div style="background:#fff3e0;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center">
+      <div style="font-family:'Fredoka One';font-size:15px;color:#e65100;margin-bottom:4px" id="resTitle">En attente</div>
+      <div style="font-size:12px;color:#666;line-height:1.6" id="resDesc">Effectue une demande de retrait pour voir le résultat ici.</div>
+    </div>
+    <div class="iw-section" id="iw-section">
+      <div class="iw-title">⚡ Retrait Instantané</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:8px;margin-bottom:8px;font-size:11px;color:rgba(255,255,255,.75);line-height:1.5">
+        <b style="color:#ffd700">Complète les 3 étapes pour tenter le retrait instantané</b>
+        <br><span style="font-size:10px;color:rgba(255,255,255,.4)">(Bouton pub AdSense ici bientôt)</span>
+      </div>
+      <!-- Quête 1 -->
+      <div class="iw-quest-card" id="iwq1" style="background:rgba(255,255,255,.08);border-radius:11px;padding:9px;margin-bottom:7px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <div style="font-family:'Fredoka One';font-size:13px;color:#ffd700;">📺 Étape 1 : 100 pubs</div>
+          <div id="iwq1-badge" style="font-size:10px;color:#4caf50;font-weight:900;"></div>
+        </div>
+        <div id="iwq1-desc" style="font-size:10px;color:rgba(255,255,255,.6);margin-bottom:5px;">0/100 pubs regardées</div>
+        <div style="background:rgba(0,0,0,.3);border-radius:5px;height:5px;margin-bottom:6px;overflow:hidden;"><div id="iwq1-fill" style="height:100%;background:#ffd700;border-radius:5px;width:0%;transition:width .3s;"></div></div>
+        <button id="iwq1-btn" class="iw-btn gold" style="font-size:12px;padding:7px;" onclick="iwWatchPub()">📺 Regarder une pub</button>
+      </div>
+      <!-- Quête 2 : masquée jusqu'à étape 1 done -->
+      <div class="iw-quest-card" id="iwq2" style="display:none;background:rgba(255,255,255,.08);border-radius:11px;padding:9px;margin-bottom:7px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <div id="iwq2-lbl" style="font-family:'Fredoka One';font-size:13px;color:#ffd700;">📅 Étape 2 : 50 pubs/j × 7 jours</div>
+          <div id="iwq2-badge" style="font-size:10px;color:#4caf50;font-weight:900;"></div>
+        </div>
+        <div id="iwq2-desc" style="font-size:10px;color:rgba(255,255,255,.6);margin-bottom:3px;"></div>
+        <div id="iwq2-cd" style="display:none;font-size:10px;color:#ff9800;font-weight:900;margin-bottom:4px;"></div>
+        <div style="background:rgba(0,0,0,.3);border-radius:5px;height:5px;margin-bottom:6px;overflow:hidden;"><div id="iwq2-fill" style="height:100%;background:#ff9800;border-radius:5px;width:0%;transition:width .3s;"></div></div>
+        <button id="iwq2-btn" class="iw-btn gold" style="font-size:12px;padding:7px;" onclick="iwWatchPub()" disabled>📺 Regarder une pub</button>
+      </div>
+      <!-- Quête 3 : 36 poissons + roulette — masquée jusqu'à étape 2 done -->
+      <div class="iw-quest-card" id="iwq3" style="display:none;background:rgba(255,255,255,.08);border-radius:11px;padding:9px;margin-bottom:7px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <div style="font-family:'Fredoka One';font-size:13px;color:#ffd700;">🐟 Étape 3 : Capturer 36 espèces</div>
+        </div>
+        <div id="iwq3-desc" style="font-size:10px;color:rgba(255,255,255,.6);margin-bottom:5px;"></div>
+        <div style="background:rgba(0,0,0,.3);border-radius:5px;height:5px;margin-bottom:7px;overflow:hidden;"><div id="iwq3-fill" style="height:100%;background:#4caf50;border-radius:5px;width:0%;transition:width .3s;"></div></div>
+        <button id="iwq3-spin-btn" class="iw-btn gold" style="font-size:12px;padding:7px;" onclick="spinFishRoulette()">🎰 Roulette poisson (1 chance/2)</button>
+        <div id="iwq3-spin-result" style="font-size:11px;color:#ffd700;text-align:center;margin-top:5px;min-height:16px;"></div>
+      </div>
+      <!-- Quête 4 : attente traitement — masquée jusqu'à étape 3 done -->
+      <div class="iw-quest-card" id="iwq4" style="display:none;background:rgba(255,255,255,.08);border-radius:11px;padding:9px;margin-bottom:7px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <div style="font-family:'Fredoka One';font-size:13px;color:#ffd700;">⌛ Étape 4 : Attente traitement</div>
+        </div>
+        <div id="iwq4-desc" style="font-size:10px;color:rgba(255,255,255,.6);margin-bottom:5px;"></div>
+        <div style="background:rgba(0,0,0,.3);border-radius:5px;height:5px;margin-bottom:6px;overflow:hidden;"><div id="iwq4-fill" style="height:100%;background:#ce93d8;border-radius:5px;width:0%;transition:width .3s;"></div></div>
+        <div id="iwq4-timer" style="display:none;font-size:11px;color:#ff9800;font-weight:900;text-align:center;margin-top:4px;"></div>
+      </div>
+      <button id="iw-claim-btn" class="iw-btn gold" style="display:none;" onclick="claimIW()">🎉 RÉCLAMER MON VIREMENT !</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP REVEAL -->
+<div id="step-ov">
+  <div class="step-em" id="stEm">🎉</div>
+  <div class="step-ti" id="stTi">Super !</div>
+  <div class="step-ds" id="stDs">...</div>
+  <button class="step-ok" id="stOk" onclick="closeStep()">OK !</button>
+</div>
+
+<!-- PIG SMASH -->
+<div id="pig-ov">
+  <div class="pigcard">
+    <span class="pig-an">🐷</span>
+    <div class="pig-ti">Smash le cochon !</div>
+    <div class="pig-sub"><span id="pigCL">100</span> coups pour débloquer +0,25€</div>
+    <button class="pig-btn" onclick="smash()">💥 SMASH !</button>
+    <button class="pig-cls" onclick="closePigOv()">Fermer</button>
+  </div>
+</div>
+
+<!-- FISH HELP -->
+<div id="fhelp-ov">
+  <div class="fhcard">
+    <h2>🎣 Aide à la pêche</h2><p>Poissons rares — chances boostées.</p>
+    <div class="frlist" id="frlist"></div>
+    <button class="fhbtn" onclick="doFishHelp()">🎲 Tenter ma chance</button>
+    <button class="fhbtn sec" onclick="closeFhOv()">Pas maintenant</button>
+  </div>
+</div>
+
+<!-- DAILY -->
+<div id="daily-ov">
+  <div class="daily-card">
+    <div class="daily-title">🎁 Connexion Quotidienne</div>
+    <div class="daily-grid" id="daily-grid"></div>
+    <button class="daily-btn" id="daily-btn" onclick="claimDaily()">Récupérer</button>
+    <button class="daily-cls" onclick="closeOv2('daily-ov')">Fermer</button>
+  </div>
+</div>
+
+<!-- LUCKY -->
+<div id="lucky-ov">
+  <div class="lucky-card">
+    <div class="lucky-title">🎰 Lucky Chance</div>
+    <div class="lucky-sub">1 tour gratuit par jour</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:3px">Prochain tour dans :</div>
+    <div class="lucky-cd" id="lucky-cd">--:--:--</div>
+    <div class="lucky-info">🎁 Pièces 🪙, poisson 🐟, jetons retrait ⚡<br><b style="color:#ffd700">Frags uniquement via Cadeaux !</b></div>
+    <button class="lucky-btn" id="lucky-btn" onclick="spinLucky()">🎲 TOURNER !</button>
+    <button class="lucky-cls" onclick="closeOv2('lucky-ov')">Fermer</button>
+  </div>
+</div>
+
+<!-- RECOMP -->
+<div id="recomp-ov">
+  <div class="recomp-card">
+    <div class="recomp-title">🔨 Récompenses</div>
+    <div class="recomp-list" id="recomp-list"></div>
+    <button class="recomp-cls" onclick="closeOv2('recomp-ov')">Fermer</button>
+  </div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div id="upgrade-ov">
+  <div class="upg-card">
+    <div class="upg-header">
+      <div class="upg-title">PLUS DE BALLES 🎈</div>
+      <button class="upg-xbtn" onclick="closeOv2('upgrade-ov')">✕</button>
+    </div>
+    <div class="upg-body">
+      <div class="upg-lv-row">
+        <div class="upg-lv-badge">Lv.<span id="upg-lv">1</span></div>
+        <div class="upg-lv-bar-wrap"><div class="upg-lv-fill" id="upg-lv-fill" style="width:0%"></div></div>
+        <div class="upg-lv-ratio" id="upg-lv-ratio">0/2</div>
+      </div>
+      <div class="upg-subtitle" id="upg-subtitle">Le nombre de billes : 50 à 52</div>
+      <div class="upg-box-anim">
+        <div class="upg-balloons">🏐🏐🏐<br>🏐🏐🏐🏐<br>🏐🏐🏐</div>
+        <div class="upg-box-label">Obtenez <span id="upg-bonus-num">2</span> balles !</div>
+      </div>
+      <button class="upg-ad-btn" onclick="doUpgradeAd()">
+        GRATUIT <span class="upg-ad-tag">AD</span>
+      </button>
+      <button style="width:100%;margin-top:8px;padding:11px;border-radius:20px;border:none;background:linear-gradient(135deg,#ab47bc,#6a1b9a);font-family:'Fredoka One';font-size:clamp(13px,3.5vw,16px);color:#fff;cursor:pointer;box-shadow:0 4px 0 #4a148c;display:flex;align-items:center;justify-content:center;gap:7px;" onclick="doBalloonAd()">
+        🎈 +5 balles max <span style="background:#fff;color:#6a1b9a;border-radius:5px;padding:1px 7px;font-size:12px;font-weight:900">1 pub</span>
+      </button>
+      <!-- Recharge rapide -->
+      <button style="width:100%;margin-top:8px;padding:10px;border-radius:20px;border:none;
+        background:linear-gradient(135deg,#42a5f5,#0d47a1);
+        font-family:'Fredoka One';font-size:clamp(14px,3.8vw,17px);color:#fff;cursor:pointer;
+        box-shadow:0 4px 0 #0a2a6e;display:flex;align-items:center;justify-content:center;gap:6px;"
+        onclick="closeOv2('upgrade-ov');openRechargeModal()">
+        🔄 Recharger balles <span style="background:#fff;color:#0d47a1;border-radius:5px;padding:1px 6px;font-size:12px;font-weight:900">2 pubs</span>
+      </button>
+      <div style="font-size:9px;color:#888;margin-top:5px;text-align:center;line-height:1.4">
+        Lv.<span id="ball-lv-display">1</span> — Chaque 2 pubs = +1 niveau · Lv.5+ = bonus balles max
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP (skin/bg) -->
+<div id="shop-ov">
+  <div class="shop-card">
+    <div class="shop-title">🎨 Personnalisation</div>
+    <div class="shop-section">
+      <div class="shop-section-title">🏐 Skins de ballons</div>
+      <div class="shop-items" id="shop-balls"></div>
+    </div>
+    <div class="shop-section">
+      <div class="shop-section-title">🌅 Arrière-plans</div>
+      <div class="shop-items" id="shop-bgs"></div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px">Chaque item = 1 pub (AdSense à venir)</div>
+    <button class="shop-cls" onclick="closeOv2('shop-ov')">Fermer</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  ALL GLOBALS — var, declared first
+// ═══════════════════════════════════════
+var pegs=[], rings=[], ballsArr=[];
+var modeEnds={rain:0,x777:0,frenzy:0,flipper:0,x13:0};
+var W=1, H=1, slideX=0, slideDir=1, slideW=0, slideSpeed=0, lastTs=0;
+var fishHelpTries=0;
+var ROWS=9, PEG_R=4, BALL_R=10, GRAV=0.22, BNC=0.62;
+var PEG_EARN=0.001;
+
+// Ring contents — cycle on every ball that enters
+var RING_CONTENTS=[
+  {type:'euro',  val:0.01, icon:'💵', label:'0,01€'},
+  {type:'fish',  val:1,    icon:'🐟', label:'POISSON'},
+  {type:'coins', val:20,   icon:'🪙', label:'20🪙'},
+  {type:'euro',  val:0.05, icon:'💵', label:'0,05€'},
+  {type:'fish',  val:1,    icon:'🐟', label:'POISSON'},
+  {type:'coins', val:60,   icon:'🪙', label:'60🪙'},
+  {type:'event', val:0,    icon:'🎰', label:'ÉVÉNEMENT'},
+  {type:'euro',  val:0.02, icon:'💵', label:'0,02€'},
+  {type:'fish',  val:1,    icon:'🐟', label:'POISSON'},
+  {type:'coins', val:100,  icon:'🪙', label:'100🪙'},
+  {type:'miss',  val:0,    icon:'💨', label:'Raté'},
+  {type:'euro',  val:0.10, icon:'💵', label:'0,10€'},
+];
+var EVENTS=['rain','frenzy','jackpot','x777'];
+var eventPtr=0;
+
+var LANES=[
+  {col:'#4caf50',ico:'💚',val:'x5',   type:'mult',n:5},
+  {col:'#424242',ico:'🕳️',val:'VIDE', type:'void',n:0},
+  {col:'#ff9800',ico:'💰',val:'0,50€',type:'euro',n:0.5},
+  {col:'#ffd700',ico:'🪙',val:'500',  type:'coins',n:500},
+  {col:'#424242',ico:'🕳️',val:'VIDE', type:'void',n:0},
+  {col:'#e91e63',ico:'🐟',val:'POISSON',type:'fish',n:1},
+  {col:'#42a5f5',ico:'💙',val:'x1',   type:'mult',n:1},
+];
+
+var FISH=[
+  {e:'🐟',n:'Poisson bleu',p:.85},{e:'🐠',n:'Poisson clown',p:.55},
+  {e:'🐡',n:'Poisson globe',p:.35},{e:'🦈',n:'Requin bébé',p:.20},
+  {e:'🐬',n:'Dauphin',p:.12},{e:'🐙',n:'Pieuvre',p:.07},
+  {e:'🦑',n:'Calmar',p:.042},{e:'🦐',n:'Crevette',p:.025},
+  {e:'🦞',n:'Homard',p:.014},{e:'🦀',n:'Crabe',p:.008},
+  {e:'🐳',n:'Baleine',p:.0045},{e:'🐋',n:'Baleine bleue',p:.0025},
+  {e:'🦭',n:'Phoque',p:.0013},{e:'🐊',n:'Croco marin',p:6.5e-4},
+  {e:'🦋',n:'Papillon mer',p:3e-4},{e:'🌊',n:'Poisson vague',p:1.4e-4},
+  {e:'⭐',n:'Étoile de mer',p:6e-5},{e:'🌺',n:'Anémone',p:2.5e-5},
+  {e:'🪸',n:'Corail doré',p:1e-5},{e:'🔮',n:'Méduse cristal',p:4e-6},
+  {e:'💎',n:'Poisson diamant',p:1.5e-6},{e:'🌙',n:'Poisson lune',p:5e-7},
+  {e:'🌈',n:'Arc-en-ciel',p:1.5e-7},{e:'🔥',n:'Poisson de feu',p:4e-8},
+  {e:'❄️',n:'Poisson de glace',p:1e-8},{e:'⚡',n:'Poisson éclair',p:2.5e-9},
+  {e:'🌟',n:"Étoile d'or",p:6e-10},{e:'🏆',n:'Champion',p:1.2e-10},
+  {e:'👑',n:'Poisson royal',p:2e-11},{e:'🎭',n:'Masqué',p:3e-12},
+  {e:'🗝️',n:'Gardien abysses',p:4e-13},{e:'🌀',n:'Spirale',p:4e-14},
+  {e:'🎯',n:'Poisson cible',p:3e-15},
+  {e:'💫',n:'Poisson cosmique',p:1e-8},
+  {e:'🧬',n:'Légendaire',p:1e-9},
+  {e:'🏅',n:'ULTRA RARE',p:1e-11},
+];
+
+// Prizes — displayed like image (grid of 3, real photos represented by emoji)
+var PRIZES=[
+  {e:'📱',n:'iPhone 16 Pro',req:70},
+  {e:'🎮',n:'Switch',req:30},
+  {e:'💍',n:'Cartier Love Bracelet',req:150},
+  {e:'🎧',n:'AirPods Pro',req:20},
+  {e:'💻',n:'MacBook Air M3',req:200},
+  {e:'📷',n:'Sony ZV-E10',req:45},
+];
+
+var PUZZLE_ITEMS=[
+  {e:'📱',label:'iPhone',color:'rgba(255,255,255,.35)'},
+  {e:'🎮',label:'Switch',color:'rgba(255,200,0,.3)'},
+  {e:'💎',label:'?',color:'rgba(200,100,255,.3)'},
+  {e:'🎁',label:'?',color:'rgba(255,150,0,.3)'},
+  {e:'📱',label:'iPhone',color:'rgba(255,255,255,.25)'},
+  {e:'🎮',label:'Switch',color:'rgba(255,200,0,.2)'},
+];
+
+var WSTEPS=[
+  {amt:300, type:'e',req:300,  lbl:'€300 UTILISER', bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:null},
+  {amt:500, type:'e',req:500,  lbl:'€500 UTILISER', bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:'day3'},
+  {amt:800, type:'e',req:800,  lbl:'€800 UTILISER', bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:'fish10'},
+  {amt:1200,type:'e',req:1200, lbl:'€1 200',         bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:'day7'},
+  {amt:2000,type:'e',req:2000, lbl:'€2 000',         bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:'fish20'},
+  {amt:5000,type:'e',req:5000, lbl:'€5 000',         bg:'linear-gradient(135deg,#26c6da,#00acc1)',cond:'day30'},
+  {amt:500, type:'c',req:500000,lbl:'€500 Pièces',   bg:'linear-gradient(135deg,#ff9800,#f57c00)',cond:null},
+  {amt:10000,type:'f',req:36,  lbl:'€10 000 Poissons',bg:'linear-gradient(135deg,#4caf50,#2e7d32)',cond:'day30'},
+];
+
+var UPGRADES=[
+  {from:50, to:52, pubsNeeded:2},{from:52,to:54,pubsNeeded:2},
+  {from:54, to:58, pubsNeeded:2},{from:58,to:62,pubsNeeded:2},
+  {from:62, to:66, pubsNeeded:2},{from:66,to:70,pubsNeeded:2},
+  {from:70, to:76, pubsNeeded:3},{from:76,to:82,pubsNeeded:3},
+  {from:82, to:88, pubsNeeded:3},{from:88,to:94,pubsNeeded:3},
+  {from:94, to:100,pubsNeeded:3},{from:100,to:110,pubsNeeded:4},
+  {from:110,to:120,pubsNeeded:4},{from:120,to:130,pubsNeeded:4},
+  {from:130,to:145,pubsNeeded:4},{from:145,to:160,pubsNeeded:5},
+  {from:160,to:175,pubsNeeded:5},{from:175,to:200,pubsNeeded:5},
+];
+
+var DAILY_REWARDS=[
+  {ico:'🪙',val:'50',  lbl:'50 pièces',  day:1},
+  {ico:'🪙',val:'100', lbl:'100 pièces', day:2},
+  {ico:'🪙',val:'200', lbl:'200 pièces', day:3},
+  {ico:'💵',val:'0.05',lbl:'+0,05€',     day:4},
+  {ico:'🪙',val:'500', lbl:'500 pièces', day:5},
+  {ico:'💵',val:'0.10',lbl:'+0,10€',     day:6},
+  {ico:'💵',val:'0.25',lbl:'+0,25€',     day:7},
+];
+
+// Ball skins
+var BALL_SKINS=[
+  {id:'beach',    e:'🏐',name:'Ballon de plage',  col:'#42a5f5',owned:true,  active:true},
+  {id:'fire',     e:'🔥',name:'Ballon de feu',    col:'#ff5722',owned:false, active:false},
+  {id:'ice',      e:'❄️',name:'Ballon de glace',  col:'#80deea',owned:false, active:false},
+  {id:'golden',   e:'⭐',name:'Ballon doré',      col:'#ffd700',owned:false, active:false},
+  {id:'purple',   e:'🔮',name:'Ballon magique',   col:'#ab47bc',owned:false, active:false},
+  {id:'rainbow',  e:'🌈',name:'Arc-en-ciel',      col:'#ff4081',owned:false, active:false},
+];
+var BG_SKINS=[
+  {id:'ocean', name:'Océan',     cls:'bg-ocean', owned:true,  active:true},
+  {id:'sunset',name:'Coucher de soleil',cls:'bg-sunset',owned:false,active:false},
+  {id:'night', name:'Nuit',      cls:'bg-night', owned:false, active:false},
+  {id:'coral', name:'Corail',    cls:'bg-coral', owned:false, active:false},
+  {id:'forest',name:'Forêt',     cls:'bg-forest',owned:false, active:false},
+  {id:'holo',  name:'Holographique',cls:'bg-holo',owned:false, active:false},
+];
+
+var SICONS=['?','7','🍋','🍒','⭐','💎','🎰','🐟','7'];
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+function loadState(){try{return JSON.parse(localStorage.getItem('pc8')||'{}');}catch(e){return {};}}
+var DEF={
+  especes:0,coins:0,frags:0,fish:{},
+  balls:32,maxBalls:50,
+  activeDays:0,lastDay:null,
+  pigPct:0,pigLv:0,pigCoups:0,
+  slotBadge:3,giftPct:15,
+  fishNoWin:0,payMethod:'paypal',payHandles:{},doubleOn:false,
+  rechargeStart:null,puzzlePieces:{},prizeFrags:{},prizeBlockLosses:{},
+  dailyStreak:0,lastDailyDate:null,lastLuckyDate:null,
+  totalBalls:0,missionBalls:0,
+  ringCycles:{},iwTokens:0,withdrawDone:false,
+  withdrawAmt:0,withdrawMethod:'paypal',withdrawHandle:'',iwRevealStep:0,
+  upgradeProgress:{},
+  activeBallSkin:'beach',activeBgSkin:'ocean',
+  ownedBallSkins:['beach'],ownedBgSkins:['ocean'],
+  gaugeVal:15,        // 0-100, fills per ring hit
+  evUnlocked:{},      // {evId: true} — unlocked by pub
+  evRunning:{},       // {evId: endTs}
+  ballLv:1,           // recharge level (1 pub = +1 lv per 2 pubs)
+  ballLvPubs:0,       // pubs watched toward next level
+  rechargeProgress:0,
+  ringGauges:[0,0,0,0,0],
+  ringGaugeEvents:[0,0,0,0,0],
+  gaugeEvPtr:0,
+  prizeEmptySlots:{},
+  deliveryAddress:null,
+};
+var S=loadState();
+Object.keys(DEF).forEach(function(k){if(!(k in S))S[k]=DEF[k];});
+if(!Array.isArray(S.ringGauges)||S.ringGauges.length<5)S.ringGauges=[0,0,0,0,0];
+if(!Array.isArray(S.ringGaugeEvents)||S.ringGaugeEvents.length<5)S.ringGaugeEvents=[0,0,0,0,0];
+if(Array.isArray(S.fish)){var _o={};S.fish.forEach(function(i){_o[i]=1;});S.fish=_o;}
+function save(){localStorage.setItem('pc8',JSON.stringify(S));}
+function checkDay(){var t=new Date().toDateString();if(S.lastDay!==t){if(S.lastDay)S.activeDays++;S.lastDay=t;save();}}
+checkDay();
+function fishUnique(){return Object.keys(S.fish).length;}
+function fishCount(i){return S.fish[i]||0;}
+function getActiveBallColor(){
+  var skin=BALL_SKINS.filter(function(s){return s.id===S.activeBallSkin;})[0];
+  return skin?skin.col:'#42a5f5';
+}
+
+// ═══════════════════════════════════════
+//  CANVAS
+// ═══════════════════════════════════════
+var canvas=document.getElementById('gc');
+var ctx=canvas.getContext('2d');
+var cwEl=document.getElementById('cw');
+
+function buildPegs(){
+  pegs=[];var ty=16,by=H-22;
+  for(var r=0;r<ROWS;r++){
+    // Dernière rangée (r=ROWS-1) : moins de pegs et plus d'espace entre eux
+    var cols=r+3;
+    var margin=r===(ROWS-1)?80:60; // dernière rangée : plus large pour laisser passer les balles
+    var sp=(W-margin)/(cols+1);
+    var startX=margin/2;
+    for(var c=0;c<cols;c++)
+      pegs.push({x:startX+sp*(c+1),y:ty+(by-ty)*(r/(ROWS-1)),lit:0,r:PEG_R});
+  }
+}
+function buildRings(){
+  rings=[];
+  // 5 rings near the bottom, widely spaced so balls fall in the GAPS
+  // Each ring sits just above the lane bar, with ~W/5 spacing (large gaps between)
+  var cnt=5;
+  var totalW=W-30;
+  var step=totalW/cnt;
+  for(var i=0;i<cnt;i++){
+    var ci=S.ringCycles[i]||0;
+    // Place rings at every other lane position to maximise gaps
+    var rx=15+step*(i+0.5);
+    rings.push({x:rx, y:H-120+(i%2)*14, outer:12, inner:5, lit:0, fishLit:0, contentIdx:ci});
+  }
+}
+function resizeCanvas(){
+  var r=cwEl.getBoundingClientRect();
+  W=Math.max(1,r.width);H=Math.max(1,r.height);
+  canvas.width=W;canvas.height=H;
+  slideW=W*0.18;slideSpeed=W*0.0036;
+  buildPegs();buildRings();
+}
+resizeCanvas();
+new ResizeObserver(function(){resizeCanvas();}).observe(cwEl);
+
+// ═══════════════════════════════════════
+//  BALL — beach ball style
+// ═══════════════════════════════════════
+function Ball(x,mode){
+  this.x=x||W/2;this.y=10;
+  this.vx=(Math.random()-.5)*0.7;this.vy=1.4;
+  this.r=BALL_R;this.done=false;this.trail=[];
+  this.mode=mode||'normal';this.ringHit=false;
+  // Color based on active skin + mode
+  var baseCol=getActiveBallColor();
+  var modeMap={double:'#ff9800',lucky:'#ab47bc'};
+  this.col=modeMap[mode]||baseCol;
+  this.col2=this.col==='#42a5f5'?'#fff':'#ffffff';
+}
+Ball.prototype.update=function(){
+  if(this.done)return;
+  this.trail.push({x:this.x,y:this.y});
+  if(this.trail.length>10)this.trail.shift();
+  this.vy+=GRAV;this.vx*=0.986;
+  this.x+=this.vx;this.y+=this.vy;
+  if(this.x<this.r){this.x=this.r;this.vx=Math.abs(this.vx)*BNC;}
+  if(this.x>W-this.r){this.x=W-this.r;this.vx=-Math.abs(this.vx)*BNC;}
+  for(var i=0;i<pegs.length;i++){
+    var p=pegs[i],dx=this.x-p.x,dy=this.y-p.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<this.r+p.r+0.5){
+      var nx=dx/d,ny=dy/d,dot=this.vx*nx+this.vy*ny;
+      this.vx-=2*dot*nx*BNC;this.vy-=2*dot*ny*BNC;
+      this.vx+=(Math.random()-.5)*.4;
+      this.x=p.x+nx*(this.r+p.r+1);this.y=p.y+ny*(this.r+p.r+1);
+      p.lit=12;
+      // Tiny earn per peg bounce
+      S.coins+=S.doubleOn?2:1;
+      S.especes+=PEG_EARN*(S.doubleOn?2:1);
+    }
+  }
+  for(var j=0;j<rings.length;j++){
+    var ring=rings[j],dx2=this.x-ring.x,dy2=this.y-ring.y,d2=Math.sqrt(dx2*dx2+dy2*dy2);
+    if(d2<ring.inner&&!this.ringHit){
+      this.ringHit=true;ring.fishLit=35;onRingCenter(this,ring,j);
+    }
+    // Pas de collision sur le bord extérieur — la balle traverse librement
+    // On allume juste visuellement si la balle passe près
+    if(d2<ring.outer+this.r){ring.lit=8;}
+  }
+  var sbY=H-87;
+  if(this.y+this.r>sbY&&this.y-this.r<sbY+10&&this.x>slideX&&this.x<slideX+slideW){
+    this.vy=-Math.abs(this.vy)*0.62;this.vx+=(Math.random()-.5)*1.8;this.y=sbY-this.r;
+  }
+  if(this.y>H+8){this.done=true;landBall(this);}
+};
+Ball.prototype.draw=function(){
+  var r=this.r,x=this.x,y=this.y;
+  // Trail
+  for(var i=0;i<this.trail.length;i++){
+    var t=this.trail[i],a=(i/this.trail.length)*0.12;
+    ctx.beginPath();ctx.arc(t.x,t.y,r*(i/this.trail.length)*.6,0,Math.PI*2);
+    ctx.fillStyle=this.col+Math.round(a*255).toString(16).padStart(2,'0');ctx.fill();
+  }
+  // Beach ball body — perfect circle with colored wedges
+  ctx.save();ctx.translate(x,y);
+  // Base circle
+  ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);
+  ctx.fillStyle=this.col;ctx.fill();
+  // 6 beach ball wedges (alternating white)
+  var wedgeColors=['#fff',this.col,'#fff',this.col,'#fff',this.col];
+  for(var w=0;w<6;w++){
+    var startA=w*(Math.PI/3)-Math.PI/2, endA=startA+Math.PI/3;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,startA,endA);ctx.closePath();
+    ctx.fillStyle=wedgeColors[w];ctx.fill();
+  }
+  // Outline
+  ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=1;ctx.stroke();
+  // Shine
+  ctx.beginPath();ctx.ellipse(-r*.3,-r*.32,r*.22,r*.13,-.5,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.5)';ctx.fill();
+  // Glow
+  ctx.shadowBlur=10;ctx.shadowColor=this.col+'88';
+  ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.restore();
+};
+
+// ═══════════════════════════════════════
+//  RING CENTER — content changes each hit
+// ═══════════════════════════════════════
+function onRingCenter(ball,ring,ringIdx){
+  // Advance to next content
+  ring.contentIdx=(ring.contentIdx+1)%RING_CONTENTS.length;
+  S.ringCycles[ringIdx]=ring.contentIdx;
+  var content=RING_CONTENTS[ring.contentIdx];
+  var mult=S.doubleOn?2:1;
+  if((modeEnds.x777||0)>Date.now())mult*=7;
+  else if((modeEnds.x13||0)>Date.now())mult*=13;
+  else if((modeEnds.frenzy||0)>Date.now())mult*=3;
+  else if((modeEnds.rain||0)>Date.now())mult*=2;
+  var appR=document.getElementById('app').getBoundingClientRect();
+  var cwR=cwEl.getBoundingClientRect();
+  var px=cwR.left-appR.left+ring.x, py=cwR.top-appR.top+ring.y;
+
+  // Swimmer jumps to ring position
+  charJumpTo((ring.x/W)*100);
+
+  if(content.type==='euro'){
+    var v=content.val*mult;S.especes+=v;
+    spawnPop(px,py,'+'+v.toFixed(2)+'€','#ffd700');
+    showEv('💰 +'+v.toFixed(2)+'€ !');
+    if(v>=0.05)triggerEvent('rain');
+  }else if(content.type==='fish'){
+    var got=doFishRoll();
+    showEv(got?'🐟 POISSON !':'🐟 Raté...');
+    if(!got)spawnPop(px,py,'🐟 Raté','#ff8a65');
+  }else if(content.type==='coins'){
+    var vc=content.val*mult;S.coins+=vc;
+    spawnPop(px,py,'+'+vc+'🪙','#fff59d');
+    showEv('🪙 +'+vc+' pièces !');
+  }else if(content.type==='event'){
+    var ev=EVENTS[eventPtr%EVENTS.length];eventPtr++;
+    triggerEvent(ev);
+  }else if(content.type==='miss'){
+    showEv('💨 Raté...');spawnPop(px,py,'💨','#aaa');
+  }
+  // ── Gauge fills on every ring hit ──
+  S.ringGauges[ringIdx]=(S.ringGauges[ringIdx]||0)+20;
+  if(S.ringGauges[ringIdx]>=100){S.ringGauges[ringIdx]=0;S.ringGaugeEvents[ringIdx]=(S.ringGaugeEvents[ringIdx]||0)+1;triggerRingGaugeEvent(ringIdx,S.ringGaugeEvents[ringIdx]);}
+  fillGauge(8);
+  updateUI();save();
+}
+
+
+// ═══════════════════════════════════════
+//  EVENT GAUGE + EVENT CARDS
+// ═══════════════════════════════════════
+var EV_DEFS=[
+  {id:'rain',   ico:'🌧️',lbl:'PLUIE',        dur:15},
+  {id:'frenzy', ico:'💰', lbl:'FRÉNÉSIE',     dur:15},
+  {id:'flipper',ico:'🏐', lbl:'SUPER FLIPPER',dur:15},
+  {id:'x777',   ico:'🎰', lbl:'777',          dur:60},
+  {id:'x13',    ico:'⚡', lbl:'x13',          dur:15},
+];
+var superFlipperEnd=0;
+
+function fillGauge(amount){
+  if(!S.gaugeVal)S.gaugeVal=0;
+  S.gaugeVal=Math.min(100,S.gaugeVal+amount);
+  var prog=document.getElementById('giftProg');
+  if(prog)prog.style.height=S.gaugeVal+'%';
+  if(S.gaugeVal>=100){
+    S.gaugeVal=0;if(prog)prog.style.height='0%';
+    var unl=EV_DEFS.filter(function(ev){return (S.evUnlocked||{})[ev.id];});
+    if(unl.length>0){var ev=unl[(S.gaugeEvPtr||0)%unl.length];S.gaugeEvPtr=((S.gaugeEvPtr||0)+1);triggerEvent(ev.id);}else{toast('Debloquer un event via pub !');}
+    save();updateEvCards();return;
+  }
+  updateEvCards();save();
+}
+
+function updateEvCards(){
+  var el=document.getElementById('ev-cards');if(!el)return;el.innerHTML='';
+  var now=Date.now();
+  EV_DEFS.forEach(function(ev){
+    var unl=(S.evUnlocked||{})[ev.id];
+    var run=(modeEnds[ev.id]||0)>now;
+    var tl=run?Math.ceil((modeEnds[ev.id]-now)/1000):0;
+    var d=document.createElement('div');
+    d.className='evc'+(run?' running':'')+(unl?'':' locked');
+    var st=run?'<div class="evc-time">'+tl+'s</div>':!unl?'<div class="evc-lock">🔒 pub</div>':'<div class="evc-lock">pret</div>';
+    d.innerHTML='<div class="evc-ico">'+ev.ico+'</div><div class="evc-lbl">'+ev.lbl+'</div>'+st;
+    if(!unl)d.onclick=(function(eid,elbl){return function(){unlockEvWithAd(eid,elbl);};})(ev.id,ev.lbl);
+    el.appendChild(d);
+  });
+}
+
+function unlockEvWithAd(evId,lbl){
+  toast('📺 Pub simulée — '+lbl+' débloqué ! (AdSense bientôt)');
+  if(!S.evUnlocked)S.evUnlocked={};
+  S.evUnlocked[evId]=true;save();updateEvCards();
+  showStep('🔓',lbl+' débloqué !','Cet événement se déclenchera quand la jauge atteindra le palier !','Parfait !');
+}
+
+setInterval(function(){if(Object.keys(modeEnds).some(function(k){return modeEnds[k]>Date.now();}))updateEvCards();},1000);
+setInterval(function(){updateIWQuests();},1000);
+
+// ═══════════════════════════════════════
+//  EVENTS
+// ═══════════════════════════════════════
+function triggerEvent(type){
+  if(type==='jackpot')type='x777';
+  var ev=null;for(var i=0;i<EV_DEFS.length;i++){if(EV_DEFS[i].id===type){ev=EV_DEFS[i];break;}}
+  if(!ev)return;
+  var dur=ev.dur*1000;
+  modeEnds[type]=Math.max(modeEnds[type]||0,Date.now()+dur);
+  flashScreen();
+  var lbs={rain:'🌧️ PLUIE x2 15s',frenzy:'💰 FRENZY x3 15s',x777:'🎰 MODE 777 60s',flipper:'🏐 FLIPPER 15s',x13:'⚡ x13 15s'};
+  showEv(lbs[type]||type);spawnFrenzyText(lbs[type]||type);
+  if(type!=='flipper')startModRain(dur);
+  updateEvCards();
+  setTimeout(function(){if((modeEnds[type]||0)<=Date.now()+100){modeEnds[type]=0;updateEvCards();}},dur+100);
+}
+function startModRain(dur){
+  var rain=document.getElementById('rain-overlay');
+  var em=['💵','🪙','💰','⭐','💎','🌟'];
+  var end=Date.now()+dur;
+  function batch(){if(Date.now()>=end){rain.style.display='none';return;}rain.style.display='block';for(var i=0;i<5;i++){(function(ii){setTimeout(function(){var el=document.createElement('div');el.className='rain-coin';el.textContent=em[Math.floor(Math.random()*em.length)];el.style.left=Math.random()*100+'%';var d=(0.8+Math.random()*0.8).toFixed(2);el.style.animationDuration=d+'s';rain.appendChild(el);setTimeout(function(){el.remove();},parseFloat(d)*1000+100);},ii*90);})(i);}setTimeout(batch,900);}
+  batch();
+}
+
+var RING_EV_CYCLE=[{id:'rain'},{id:'frenzy'},{id:'flipper'},{id:'x777'},{id:'x13'}];
+function triggerRingGaugeEvent(ri,count){var ev=RING_EV_CYCLE[(count-1)%RING_EV_CYCLE.length];if(rings[ri])rings[ri].fishLit=80;triggerOrUnlock(ev.id);}
+function triggerOrUnlock(eid){var ev=EV_DEFS.filter(function(e){return e.id===eid;})[0];if((S.evUnlocked||{})[eid]){triggerEvent(eid);}else{showRingUnlockAd(eid,ev?ev.lbl:eid,function(){triggerEvent(eid);});}}
+function showRingUnlockAd(eid,enm,cb){showStep('🔒',enm+' — pub','Pub pour ce mode !','📺 Pub');document.getElementById('stOk').onclick=function(){document.getElementById('stOk').onclick=function(){closeStep();};toast('Debloque: '+enm);if(!S.evUnlocked)S.evUnlocked={};S.evUnlocked[eid]=true;save();updateEvCards();closeStep();cb();};}
+function startRain(){startModRain(2500);}
+
+function flashScreen(){
+  var fl=document.getElementById('jflash');fl.style.display='block';
+  fl.classList.remove('flash-anim');void fl.offsetWidth;fl.classList.add('flash-anim');
+  setTimeout(function(){fl.style.display='none';fl.classList.remove('flash-anim');},700);
+}
+function spawnFrenzyText(txt){
+  var app=document.getElementById('app');
+  var el=document.createElement('div');el.className='frenzy-text';
+  el.textContent=txt;el.style.top='35%';
+  app.appendChild(el);
+  setTimeout(function(){el.remove();},2300);
+}
+
+// ═══════════════════════════════════════
+//  LANE LAND
+// ═══════════════════════════════════════
+function landBall(ball){
+  var lw=W/LANES.length,idx=Math.min(LANES.length-1,Math.max(0,Math.floor(ball.x/lw)));
+  var lane=LANES[idx],mult=S.doubleOn?2:1;
+  var appR=document.getElementById('app').getBoundingClientRect();
+  var cwR=cwEl.getBoundingClientRect();
+  var px=cwR.left-appR.left+ball.x,py=cwR.top-appR.top+Math.min(ball.y,H-18);
+    var mm=1;
+  if((modeEnds.x777||0)>Date.now())mm=7;
+  else if((modeEnds.x13||0)>Date.now())mm=13;
+  else if((modeEnds.frenzy||0)>Date.now())mm=3;
+  else if((modeEnds.rain||0)>Date.now())mm=2;
+  var tm=mult*mm;
+  if(lane.type==='void'){if((modeEnds.flipper||0)>Date.now()){var sf=Math.floor(80*tm);S.coins+=sf;spawnPop(px,py,'+'+sf+'🪙','#ffd700');}else{spawnPop(px,py,'🕳️','#888');}}
+  else if(lane.type==='euro'){var v=lane.n*tm;S.especes+=v;spawnPop(px,py,'+'+v.toFixed(2)+'€','#ffd700');}
+  else if(lane.type==='coins'){var vc=lane.n*tm;S.coins+=vc;spawnPop(px,py,'+'+vc+'🪙','#fff59d');}
+  else if(lane.type==='mult'){var vm=Math.floor(50*lane.n*tm);S.coins+=vm;spawnPop(px,py,'+'+vm+'🪙','#fff59d');}
+  else if(lane.type==='fish'){doFishRoll();spawnPop(px,py,'🐟?','#ff8a65');}
+  if((modeEnds.x777||0)>Date.now()){S.especes+=0.07;spawnPop(px+18,py-14,'+0.07€','#ffd700');}
+  S.pigPct=Math.min(100,S.pigPct+1);
+  S.totalBalls=(S.totalBalls||0)+1;
+  S.missionBalls=(S.missionBalls||0)+1;
+  // gauge also fills slightly from lane hits (less than rings)
+  fillGauge(2);
+  updatePig();S.fishNoWin=(S.fishNoWin||0)+1;checkFishHint();
+  updateUI();save();
+}
+
+// ═══════════════════════════════════════
+//  SLIDER
+// ═══════════════════════════════════════
+function updateSlider(){
+  if(slideW<1)return;
+  slideX+=slideDir*slideSpeed;
+  if(slideX>W-slideW-4){slideX=W-slideW-4;slideDir=-1;}
+  if(slideX<4){slideX=4;slideDir=1;}
+}
+
+// ═══════════════════════════════════════
+//  DRAW
+// ═══════════════════════════════════════
+function drawCanvas(){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+  for(var x=0;x<W;x+=38){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(var y=0;y<H;y+=38){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // Pegs
+  for(var i=0;i<pegs.length;i++){
+    var p=pegs[i],l=p.lit>0;if(l)p.lit--;
+    var g=ctx.createRadialGradient(p.x-1,p.y-1,0,p.x,p.y,p.r);
+    g.addColorStop(0,l?'#fff':'#a5d6a7');g.addColorStop(1,l?'#66bb6a':'#2e7d32');
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=g;
+    if(l){ctx.shadowBlur=9;ctx.shadowColor='#a5d6a7';}ctx.fill();ctx.shadowBlur=0;
+  }
+  // Rings — bottom area, widely spaced with gaps for balls to fall through
+  // Color fill changes with content type — very visible
+  var RING_COLORS={euro:'rgba(255,215,0,.55)',fish:'rgba(255,100,50,.55)',
+    coins:'rgba(200,255,100,.45)',event:'rgba(200,100,255,.55)',miss:'rgba(100,100,100,.35)'};
+  var RING_GLOW={euro:'#ffd700',fish:'#ff6432',coins:'#c8ff64',event:'#c864ff',miss:'#aaa'};
+  for(var j=0;j<rings.length;j++){
+    var ring=rings[j];if(ring.lit>0)ring.lit--;if(ring.fishLit>0)ring.fishLit--;
+    var rl=ring.lit>0,rfl=ring.fishLit>0;
+    var content=RING_CONTENTS[ring.contentIdx];
+    var fillCol=RING_COLORS[content.type]||'rgba(255,255,255,.2)';
+    var glowCol=RING_GLOW[content.type]||'#fff';
+    // Filled background circle — color shows content type clearly
+    ctx.beginPath();ctx.arc(ring.x,ring.y,ring.outer,0,Math.PI*2);
+    ctx.fillStyle=rfl?glowCol+'99':fillCol;
+    if(rfl||rl){ctx.shadowBlur=22;ctx.shadowColor=glowCol;}
+    ctx.fill();ctx.shadowBlur=0;
+    // Outer border
+    ctx.beginPath();ctx.arc(ring.x,ring.y,ring.outer,0,Math.PI*2);
+    ctx.strokeStyle=rfl?glowCol:rl?'#fff':'rgba(255,255,255,.7)';
+    ctx.lineWidth=rfl?4:rl?3:2.5;
+    if(rfl){ctx.shadowBlur=22;ctx.shadowColor=glowCol;}ctx.stroke();ctx.shadowBlur=0;
+    // Inner circle (hole)
+    ctx.beginPath();ctx.arc(ring.x,ring.y,ring.inner,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=1.5;ctx.stroke();
+    // Content ICON — large and centered
+    ctx.font=(ring.inner*1.6)+'px serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.globalAlpha=rfl?1:.9;
+    ctx.fillText(content.icon,ring.x,ring.y);ctx.globalAlpha=1;
+    // Content LABEL below ring — bigger font, easy to read from far
+    var lblSize=Math.max(9,Math.min(12,W*.028));
+    ctx.font='900 '+lblSize+'px Nunito';
+    ctx.fillStyle=rfl?glowCol:'#fff';
+    ctx.textAlign='center';ctx.textBaseline='top';
+    if(rfl){ctx.shadowBlur=8;ctx.shadowColor=glowCol;}
+    ctx.fillText(content.label,ring.x,ring.y+ring.outer+4);
+    ctx.shadowBlur=0;
+    var rgP=(S.ringGauges&&S.ringGauges[j])||0;
+    if(rgP>0){ctx.beginPath();ctx.arc(ring.x,ring.y,ring.outer+7,-Math.PI/2,-Math.PI/2+(2*Math.PI*rgP/100));ctx.strokeStyle='#ffd700';ctx.lineWidth=3.5;ctx.shadowBlur=8;ctx.shadowColor='#ffd700';ctx.stroke();ctx.shadowBlur=0;}
+  }
+  // Slider bar
+  if(slideW>0){
+    var sbY=H-87;
+    var grad=ctx.createLinearGradient(slideX,sbY,slideX+slideW,sbY);
+    grad.addColorStop(0,'#ef5350');grad.addColorStop(1,'#b71c1c');
+    ctx.fillStyle=grad;ctx.shadowBlur=8;ctx.shadowColor='rgba(244,67,54,.5)';
+    ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(slideX,sbY,slideW,10,5);
+    else ctx.rect(slideX,sbY,slideW,10);
+    ctx.fill();ctx.shadowBlur=0;
+  }
+  // Lane dividers
+  var lw=W/LANES.length;
+  ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1;
+  for(var d=1;d<LANES.length;d++){ctx.beginPath();ctx.moveTo(lw*d,H-35);ctx.lineTo(lw*d,H);ctx.stroke();}
+  // Balls
+  for(var b=0;b<ballsArr.length;b++)ballsArr[b].draw();
+  var _n=Date.now();var _ay=14;
+  EV_DEFS.forEach(function(ev){if((modeEnds[ev.id]||0)>_n){var sc=Math.ceil((modeEnds[ev.id]-_n)/1000);var tx=ev.ico+' '+ev.lbl+' '+sc+'s';ctx.font='bold 11px Nunito';var tw=ctx.measureText(tx).width+20;ctx.save();ctx.globalAlpha=0.88;ctx.fillStyle='rgba(0,0,0,.75)';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(W/2-tw/2,_ay,tw,22,11);else ctx.rect(W/2-tw/2,_ay,tw,22);ctx.fill();ctx.strokeStyle=ev.id==='x777'?'#ffd700':ev.id==='x13'?'#ff5722':'#4caf50';ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,W/2,_ay+11);ctx.restore();_ay+=27;}});
+}
+function gameLoop(ts){
+  requestAnimationFrame(gameLoop);
+  var dt=Math.min(ts-lastTs,50);lastTs=ts;
+  var steps=Math.max(1,Math.round(dt/16));
+  updateSlider();
+  for(var s=0;s<steps;s++)for(var b=0;b<ballsArr.length;b++)ballsArr[b].update();
+  for(var i=ballsArr.length-1;i>=0;i--)if(ballsArr[i].done)ballsArr.splice(i,1);
+  drawCanvas();
+}
+requestAnimationFrame(gameLoop);
+
+// ═══════════════════════════════════════
+//  INPUT + DROP
+// ═══════════════════════════════════════
+function handleDrop(cx){
+  if(S.balls<=0){toast('Plus de balles ! Attends la recharge.');return;}
+  var r=cwEl.getBoundingClientRect(),x=cx-r.left;
+  S.balls--;if(!S.rechargeStart)S.rechargeStart=Date.now();
+  save();updateUI();
+  ballsArr.push(new Ball(x,'normal'));
+  charJumpTo((x/W)*100);
+}
+canvas.addEventListener('click',function(e){handleDrop(e.clientX);});
+canvas.addEventListener('touchend',function(e){e.preventDefault();if(e.changedTouches.length)handleDrop(e.changedTouches[0].clientX);},{passive:false});
+
+function charJumpTo(pct){
+  var ch=document.getElementById('char');
+  ch.style.left=Math.min(84,Math.max(13,pct))+'%';
+  ch.classList.remove('char-j');void ch.offsetWidth;ch.classList.add('char-j');
+  setTimeout(function(){ch.classList.remove('char-j');},460);
+}
+
+// Recharge 1 ball every 5 seconds
+setInterval(function(){
+  if(S.balls>=S.maxBalls){S.rechargeStart=null;save();updateUI();return;}
+  if(!S.rechargeStart){S.rechargeStart=Date.now();save();}
+  var el=Date.now()-S.rechargeStart;
+  if(el>=5000){
+    S.balls=Math.min(S.maxBalls,S.balls+1);
+    S.rechargeStart=S.balls<S.maxBalls?Date.now():null;
+    save();updateUI();
+    if(S.balls===S.maxBalls)toast('🎈 Balles pleines !');
+  }else{
+    var nb=document.getElementById('next-ball');
+    if(nb)nb.textContent='Suivant dans '+parseFloat(((5000-el)/1000).toFixed(1))+'s';
+  }
+},200);
+
+// ═══════════════════════════════════════
+//  UI
+// ═══════════════════════════════════════
+function fmtC(n){return n>=1e6?(n/1e6).toFixed(2)+'M':n>=1000?(n/1000).toFixed(2)+'K':String(Math.floor(n));}
+function updateUI(){
+  document.getElementById('hvE').textContent=S.especes.toFixed(2).replace('.',',');
+  document.getElementById('hvC').textContent=fmtC(S.coins);
+  document.getElementById('hvF').textContent=S.frags;
+  document.getElementById('bvtxt').textContent=S.balls+'/'+S.maxBalls;
+  document.getElementById('fpv').textContent=fishUnique()+'/36';
+  updateWithdraw();updateLuckyCd();updateIWUI();
+  var bld=document.getElementById('ball-lv-display');
+  if(bld)bld.textContent=S.ballLv||1;
+}
+
+// Lane bar
+function buildLaneBar(){
+  var bar=document.getElementById('lane-bar');bar.innerHTML='';
+  for(var i=0;i<LANES.length;i++){
+    var lane=LANES[i],d=document.createElement('div');d.className='lane';d.style.flex='1';
+    var vd=lane.type==='void';
+    d.innerHTML='<div class="lane-bg" style="background:'+lane.col+';opacity:'+(vd?.4:.85)+'"></div>'+
+      '<div class="lane-ico">'+lane.ico+'</div><div class="lane-val">'+lane.val+'</div>'+
+      '<div class="lane-hole" style="'+(vd?'background:rgba(0,0,0,.88)':'')+'"></div>';
+    bar.appendChild(d);
+  }
+}
+buildLaneBar();
+
+// ═══════════════════════════════════════
+//  FISH
+// ═══════════════════════════════════════
+function doFishRoll(){
+  for(var i=0;i<FISH.length;i++){
+    if(Math.random()<FISH[i].p){
+      S.fish[i]=(S.fish[i]||0)+1;S.fishNoWin=0;save();
+      spawnFishPop(FISH[i].e);
+      toast('🎉 '+FISH[i].e+' '+FISH[i].n+(S.fish[i]>1?' (x'+S.fish[i]+')':''));
+      updateFishGrid();updateUI();
+      if(fishUnique()===36)showStep('🏆','36 espèces !','Collection complète ! Bonus dans Espèces Dehors.','🎉 Incroyable !');
+      return true;
+    }
+  }
+  return false;
+}
+function spawnFishPop(e){
+  var app=document.getElementById('app');var el=document.createElement('div');
+  el.className='fpop';el.textContent=e;
+  el.style.cssText='position:absolute;pointer-events:none;left:'+(W/2-18)+'px;top:40%;z-index:75;';
+  app.appendChild(el);setTimeout(function(){el.remove();},1300);
+}
+function checkFishHint(){if(fishUnique()<36&&(S.fishNoWin||0)>=25)document.getElementById('fish-help-hint').style.display='block';}
+function updateFishGrid(){
+  var g=document.getElementById('fgrid');if(!g)return;g.innerHTML='';
+  for(var i=0;i<FISH.length;i++){
+    var f=FISH[i],cnt=fishCount(i),got=cnt>0;
+    var c=document.createElement('div');c.className='fcell '+(got?'got':'locked');
+    c.innerHTML='<span style="filter:'+(got?'none':'grayscale(1) opacity(.5)')+'">'+f.e+'</span><div class="fnum">'+(i+1)+'</div>';
+    if(got&&cnt>1){var b=document.createElement('div');b.className='fcnt';b.textContent='x'+cnt;c.appendChild(b);}
+    else if(got){var t=document.createElement('div');t.className='ftick';t.textContent='✓';c.appendChild(t);}
+    g.appendChild(c);
+  }
+  document.getElementById('fishProgLbl').textContent=fishUnique()+'/36';
+}
+function openFishHelp(){
+  var list=document.getElementById('frlist');list.innerHTML='';
+  var rem=[];for(var i=0;i<FISH.length;i++){if(!fishCount(i))rem.push({f:FISH[i],i:i});}
+  var hard=rem.slice(-3);
+  for(var j=0;j<hard.length;j++){
+    var f=hard[j].f,odds=1/f.p;
+    var os=odds<1000?'1/'+Math.round(odds):odds<1e6?'1/'+Math.round(odds).toLocaleString('fr'):'1/'+(odds/1e6).toFixed(1)+'M';
+    list.innerHTML+='<div class="fritem"><div class="fie">'+f.e+'</div><div class="fin"><div class="fr-nm">'+f.n+'</div><div class="fr-od">'+os+'</div></div></div>';
+  }
+  closeOv('fish-ov');document.getElementById('fhelp-ov').style.display='flex';
+}
+function doFishHelp(){
+  fishHelpTries++;closeFhOv();
+  var rem=[];for(var i=0;i<FISH.length;i++){if(!fishCount(i))rem.push({f:FISH[i],i:i});}
+  if(!rem.length){toast('Tu as tous les poissons !');return;}
+  var hard=rem.slice(-3),bo=[1/100,1/1000,1/10000];var won=false;
+  for(var j=0;j<hard.length;j++){
+    if(won)break;
+    if(Math.random()<(bo[j]||1/10000)){
+      won=true;S.fish[hard[j].i]=(S.fish[hard[j].i]||0)+1;S.fishNoWin=0;save();
+      spawnFishPop(hard[j].f.e);toast('🎉 Rare ! '+hard[j].f.e+' '+hard[j].f.n);
+      updateFishGrid();updateUI();
+    }
+  }
+  if(!won){var m=['Pas de chance…','Tentative '+fishHelpTries+'…','Presque !','Continue…'];toast(m[Math.min(m.length-1,fishHelpTries-1)]);}
+}
+function closeFhOv(){document.getElementById('fhelp-ov').style.display='none';}
+function openFish(){updateFishGrid();document.getElementById('fish-ov').classList.add('show');}
+
+// ═══════════════════════════════════════
+//  PRIZES — like the image
+// ═══════════════════════════════════════
+function buildPrizesScreen(){
+  var g=document.getElementById('prizes-grid3');if(!g)return;g.innerHTML='';
+  for(var i=0;i<PRIZES.length;i++){
+    var p=PRIZES[i],myF=S.prizeFrags[i]||0,pct=Math.min(100,Math.round(myF/p.req*100));
+    var d=document.createElement('div');d.className='prize-item';
+    d.innerHTML='<span class="prize-item-img">'+p.e+'</span><div class="prize-item-name">'+p.n+'</div><div class="prize-item-bar">'+myF+'/'+p.req+' ('+pct+'%)</div>';
+    (function(idx,prize){d.onclick=function(){openPrizeDetail(idx,prize);};})(i,p);
+    g.appendChild(d);
+  }
+}
+var _claimIdx=-1;
+function openPrizeDetail(idx,prize){
+  _claimIdx=idx;
+  document.getElementById('prize-claim-box').style.display='block';
+  document.getElementById('pcb-title').textContent=prize.e+' '+prize.n;
+  renderFragSlots(idx,prize);
+}
+function renderFragSlots(idx,prize){
+  var box=document.getElementById('pcb-slots');if(!box)return;box.innerHTML='';
+  var myF=S.prizeFrags[idx]||0,total=prize.req,show=Math.min(30,total);
+  for(var i=0;i<show;i++){
+    var d=document.createElement('div');
+    var fv=getFragValue(i,total);
+    var late=(i/total)>=0.70;
+    if(i<myF){
+      var empty=S.prizeEmptySlots&&S.prizeEmptySlots[idx]&&S.prizeEmptySlots[idx][i];
+      d.className='fslot '+(empty?'empty-frag':'revealed');
+      d.textContent=empty?'X':(fv.type==='coin'?'C':'D');
+    }else{
+      d.className='fslot '+(late?'unknown':'');
+      d.textContent=late?'?':'L';
+    }
+    box.appendChild(d);
+  }
+  if(total>show){var m=document.createElement('div');m.style.cssText='color:rgba(255,255,255,.5);font-size:11px;width:100%;text-align:center;margin-top:4px;';m.textContent='... +'+(total-show)+' cases encore';box.appendChild(m);}
+  var rate=getFragNothingRate(myF,total);
+  var fv2=getFragValue(myF,total);
+  var remaining=total-myF;
+  var valTxt=fv2.type==='coin'?'Pièce symbolique':'+'+fv2.val.toFixed(4)+'€';
+  var info=document.getElementById('pcb-info');
+  // Ne jamais afficher le % d'échec
+  if(info)info.textContent=myF+'/'+total+' fragments | '+valTxt;
+  var btn=document.getElementById('pcb-btn');if(!btn)return;
+  if(myF>=total){btn.textContent='🎁 Réclamer le cadeau !';btn.onclick=function(){claimFullPrize(idx,prize);};}
+  else{btn.textContent='📺 Pub → Fragment suivant';btn.onclick=function(){claimNextFrag();};}
+}
+// ── Fragment value: coins avant la moitié, décroissance brutale après ──
+// La décroissance commence exactement à la MOITIÉ du total requis
+// 0.01 → 0.001 → 0.0001 → quasi 0 vers la fin
+function getFragValue(fragIdx, total){
+  var half=total/2;
+  if(fragIdx<half){
+    return {type:'coin',val:1}; // pièce symbolique avant la moitié
+  }
+  // Après la moitié : décroissance exponentielle brutale
+  // t=0 au début de la 2e moitié, t=1 à la fin
+  var t=(fragIdx-half)/half;
+  // 0.01 * 0.1^t  →  0.01 au début, 0.001 à t=0.5, 0.0001 à t=0.75, ~0 à t=1
+  var val=0.01*Math.pow(0.01,t);
+  return {type:'frag', val:Math.max(0.000001,val)};
+}
+// ── Nothing rate: monte à partir de la moitié, quasi-impossible à la fin ──
+// Les 3 DERNIERS slots ont un système de blocage spécial (pas de taux affiché)
+function getFragNothingRate(fragIdx, total){
+  var remaining=total-fragIdx;
+  if(remaining<=3) return 1.0; // géré séparément dans claimNextFrag
+  var half=total/2;
+  if(fragIdx<half) return 0.05;
+  var t=(fragIdx-half)/(half-3);
+  t=Math.min(1,t);
+  return Math.min(0.97, 0.50+0.47*Math.pow(t,0.8));
+}
+
+function claimNextFrag(){
+  var idx=_claimIdx;if(idx<0)return;var prize=PRIZES[idx];if(!prize)return;
+  var myFint=Math.floor(S.prizeFrags[idx]||0);
+  var total=prize.req;
+  var remaining=total-myFint;
+  var rate=getFragNothingRate(myFint,total);
+  var fv=getFragValue(myFint,total);
+  toast('📺 Pub simulée (AdSense bientôt)');
+  if(!S.iwQuest)S.iwQuest={pubsTotal:0,pubsToday:0,pubsDayStart:null,daysCompleted:0,waitStart:null,waitDays:0};
+  S.iwQuest.pubsTotal=(S.iwQuest.pubsTotal||0)+1;
+
+  var lmsgs=['😔 Pas de chance...','🌊 Raté !','💨 Presque !','😤 Continue...','❌ Rien cette fois'];
+
+  // ── Système des 3 derniers : compteur N'avance QUE après X pertes consécutives ──
+  // Dernier (remaining=1) : impossible — jamais avance
+  // Avant-dernier (remaining=2) : avance seulement après 2 pertes
+  // Avant-avant-dernier (remaining=3) : avance seulement après 3 pertes
+  if(remaining===1){
+    // Toujours perdre, jamais avancer
+    save();
+    toast(lmsgs[Math.floor(Math.random()*lmsgs.length)]);
+    renderFragSlots(idx,prize);buildPrizesScreen();
+    return;
+  }
+  if(remaining===2||remaining===3){
+    var lossesNeeded=remaining; // 2 pertes pour remaining=2, 3 pertes pour remaining=3
+    if(!S.prizeBlockLosses)S.prizeBlockLosses={};
+    var key=idx+'_'+myFint;
+    var losses=(S.prizeBlockLosses[key]||0)+1;
+    S.prizeBlockLosses[key]=losses;
+    save();
+    if(losses>=lossesNeeded){
+      // Enfin avance — mais ne gagne rien
+      S.prizeBlockLosses[key]=0;
+      if(!S.prizeEmptySlots)S.prizeEmptySlots={};
+      if(!S.prizeEmptySlots[idx])S.prizeEmptySlots[idx]={};
+      S.prizeEmptySlots[idx][myFint]=true;
+      S.prizeFrags[idx]=myFint+1;
+      save();
+    }
+    toast(lmsgs[Math.floor(Math.random()*lmsgs.length)]);
+    renderFragSlots(idx,prize);buildPrizesScreen();
+    return;
+  }
+
+  // ── Slots normaux ──
+  var lost=Math.random()<rate;
+  if(lost){
+    if(!S.prizeEmptySlots)S.prizeEmptySlots={};
+    if(!S.prizeEmptySlots[idx])S.prizeEmptySlots[idx]={};
+    S.prizeEmptySlots[idx][myFint]=true;
+    S.prizeFrags[idx]=myFint+1;
+    save();
+    toast(lmsgs[Math.floor(Math.random()*lmsgs.length)]);
+  }else{
+    S.prizeFrags[idx]=myFint+1;
+    if(fv.type==='frag'){
+      S.especes+=fv.val;
+      save();
+      toast('+'+fv.val.toFixed(4)+'€ frag ('+(myFint+1)+'/'+total+')');
+    }else{
+      S.coins+=1;
+      save();
+      toast('🪙 +1 pièce ('+(myFint+1)+'/'+total+')');
+    }
+  }
+  renderFragSlots(idx,prize);buildPrizesScreen();
+}
+
+function claimFullPrize(idx,prize){
+  if(!S.deliveryAddress||!S.deliveryAddress.name){toast('📦 Ajoute ton adresse !');openAddressForm();return;}
+  showStep('🎁','Cadeau réclamé !',prize.e+' '+prize.n+'\nExpéd. : '+S.deliveryAddress.name+', '+S.deliveryAddress.city,'OK !');
+  document.getElementById('stOk').onclick=function(){closeStep();};
+  S.prizeFrags[idx]=0;if(S.prizeEmptySlots)delete S.prizeEmptySlots[idx];save();buildPrizesScreen();
+  document.getElementById('prize-claim-box').style.display='none';
+}
+function openAddressForm(){
+  var f=document.getElementById('addr-form');if(!f)return;f.style.display='block';
+  if(S.deliveryAddress){
+    document.getElementById('addr-name').value=S.deliveryAddress.name||'';
+    document.getElementById('addr-street').value=S.deliveryAddress.street||'';
+    document.getElementById('addr-city').value=S.deliveryAddress.city||'';
+    document.getElementById('addr-zip').value=S.deliveryAddress.zip||'';
+    document.getElementById('addr-country').value=S.deliveryAddress.country||'';
+  }
+}
+function saveAddress(){
+  var name=document.getElementById('addr-name').value.trim();
+  var city=document.getElementById('addr-city').value.trim();
+  if(!name||!city){toast('Nom + ville requis !');return;}
+  S.deliveryAddress={name:name,street:document.getElementById('addr-street').value.trim(),city:city,zip:document.getElementById('addr-zip').value.trim(),country:document.getElementById('addr-country').value.trim()};
+  save();document.getElementById('addr-form').style.display='none';toast('📦 Adresse sauvegardée !');
+  var d=document.getElementById('addr-saved-display');if(d)d.textContent='✅ '+name+', '+city;
+}
+function openPrizes(){buildPrizesScreen();document.getElementById('prizes-screen').style.display='block';}
+function closePrizes(){document.getElementById('prizes-screen').style.display='none';}
+
+// ═══════════════════════════════════════
+//  CASHOUT
+// ═══════════════════════════════════════
+function updateWithdraw(){
+  var g=document.getElementById('wgrid');if(!g)return;g.innerHTML='';
+  for(var i=0;i<WSTEPS.length;i++){
+    (function(step,idx){
+      var cur=step.type==='e'?S.especes:step.type==='c'?S.coins:fishUnique();
+      var pct=Math.min(100,(cur/step.req)*100);
+      var ico='💵',valTxt=cur.toFixed(2).replace('.',',')+'€/'+step.amt+'€';
+      if(step.type==='c'){ico='🪙';valTxt=fmtC(Math.floor(cur))+'/'+fmtC(step.req);}
+      if(step.type==='f'){ico='🐟';valTxt=cur+'/36';}
+      var d=document.createElement('div');d.className='wcard';d.style.background=step.bg;
+      d.innerHTML='<div class="wc-logo">'+S.payMethod+'</div>'+
+        '<div class="wc-amt">€'+step.amt.toLocaleString('fr')+'</div>'+
+        '<div class="wc-req">'+step.lbl+'</div>'+
+        '<div class="wc-bar"><div class="wc-fill" style="width:'+pct+'%"></div></div>'+
+        '<div class="wc-val">'+ico+' '+valTxt+'</div>';
+      d.onclick=function(){tryWithdraw(step,idx);};
+      g.appendChild(d);
+    })(WSTEPS[i],i);
+  }
+}
+function condMet(c){
+  if(!c)return true;
+  var m={day3:S.activeDays>=3,day7:S.dailyStreak>=7,day30:S.activeDays>=30,fish10:fishUnique()>=10,fish20:fishUnique()>=20};
+  return m[c]||true;
+}
+function condDesc(c){
+  if(!c)return null;
+  var m={day3:'3 jours d\'activité ('+S.activeDays+'/3)',day7:'7 connexions ('+S.dailyStreak+'/7)',
+    day30:'30 jours ('+S.activeDays+'/30)',fish10:'10 espèces ('+fishUnique()+'/10)',fish20:'20 espèces ('+fishUnique()+'/20)'};
+  return m[c]||null;
+}
+function tryWithdraw(step,idx){
+  var cur=step.type==='e'?S.especes:step.type==='c'?S.coins:fishUnique();
+  if(cur<step.req){toast('❌ Solde insuffisant.');return;}
+  if(!condMet(step.cond)){showStep('🔒','Condition requise',condDesc(step.cond)||'Continue à jouer !');return;}
+  // Déduire le montant de la cagnotte
+  if(step.type==='e'){S.especes=Math.max(0,S.especes-step.req);}
+  else if(step.type==='c'){S.coins=Math.max(0,S.coins-step.req);}
+  S.withdrawDone=true;
+  S.withdrawAmt=step.amt;
+  S.withdrawMethod=S.payMethod;
+  S.withdrawHandle=(S.payHandles&&S.payHandles[S.payMethod])||'';
+  // Réinitialise les quêtes pour ce nouveau retrait
+  S.iwQuest={pubsTotal:0,pubsToday:0,pubsDayStart:null,pubsDayTs:null,daysCompleted:0,waitStart:null,waitDays:0};
+  S.iwRevealStep=0; // étape révélée dans l'onglet résultat
+  save();updateUI();closeCashout();
+  // Révéler les étapes une à une
+  revealNextWithdrawStep();
+}
+
+function revealNextWithdrawStep(){
+  var step=S.iwRevealStep||0;
+  var amt=S.withdrawAmt||'?';
+  var method=(S.withdrawMethod||'paypal').toUpperCase();
+  var handle=S.withdrawHandle?(' → '+S.withdrawHandle):'';
+  if(step===0){
+    showStep('✅','Demande reçue !','Ton retrait de '+amt+'€ via '+method+handle+' a bien été enregistré.\n\nClique pour continuer...','Suivant →');
+    document.getElementById('stOk').onclick=function(){S.iwRevealStep=1;save();revealNextWithdrawStep();};
+  }else if(step===1){
+    showStep('🔍','Vérification en cours','Nos équipes vérifient ton compte et ton activité.','OK');
+    document.getElementById('stOk').onclick=function(){S.iwRevealStep=2;save();closeStep();openCashout();switchTab('res');document.getElementById('iw-section').classList.add('show');updateIWUI();};
+  }
+}
+function openCashout(){document.getElementById('co-screen').style.display='block';updateWithdraw();}
+function closeCashout(){document.getElementById('co-screen').style.display='none';}
+function switchTab(t){
+  document.getElementById('tab-co').classList.toggle('active',t==='co');
+  document.getElementById('tab-res').classList.toggle('active',t==='res');
+  document.getElementById('tab-co-c').style.display=t==='co'?'block':'none';
+  document.getElementById('tab-res-c').style.display=t==='res'?'block':'none';
+}
+function setPay(m){
+  S.payMethod=m;save();
+  ['paypal','revolut','lydia','paylib'].forEach(function(x){document.getElementById('pm-'+x).classList.toggle('active',x===m);});
+  // Update handle section label + prefix
+  var labels={paypal:'💳 Ton lien PayPal.me',revolut:'💳 Ton lien Revolut (@)',lydia:'💳 Ton pseudo Lydia',paylib:'💳 Ton pseudo Paylib'};
+  var prefixes={paypal:'paypal.me/',revolut:'revolut.me/',lydia:'@',paylib:'@'};
+  var lbl=document.getElementById('pay-handle-label');
+  var pfx=document.getElementById('pay-handle-prefix');
+  var inp=document.getElementById('pay-handle-input');
+  var saved=document.getElementById('pay-handle-saved');
+  if(lbl)lbl.textContent=labels[m]||'💳 Ton pseudo';
+  if(pfx)pfx.textContent=prefixes[m]||'@';
+  // Load saved handle for this method
+  var handles=S.payHandles||{};
+  if(inp)inp.value=handles[m]||'';
+  if(saved)saved.textContent=handles[m]?'✅ '+handles[m]:'';
+}
+function savePayHandle(){
+  var inp=document.getElementById('pay-handle-input');
+  if(!inp)return;
+  var val=inp.value.trim().replace(/^[@/]/,'');
+  if(!S.payHandles)S.payHandles={};
+  S.payHandles[S.payMethod]=val;
+  save();
+  var saved=document.getElementById('pay-handle-saved');
+  if(saved)saved.textContent=val?'✅ Sauvegardé : '+val:'';
+}
+
+// ═══════════════════════════════════════
+//  INSTANT WITHDRAW
+// ═══════════════════════════════════════
+function updateIWUI(){
+  updateIWQuests();
+}
+function updateIWQuests(){
+  if(!S.iwQuest)S.iwQuest={pubsTotal:0,pubsToday:0,pubsDayStart:null,pubsDayTs:null,daysCompleted:0,waitStart:null,waitDays:0};
+  var q=S.iwQuest;
+  var now=Date.now();
+  if(!q.pubsDayTs){q.pubsDayTs=now;q.pubsToday=0;}
+  else if(now-q.pubsDayTs>=86400000){q.pubsDayTs=now;q.pubsToday=0;}
+
+  var amt=S.withdrawAmt||0;
+  var daysNeeded=(amt>=5000)?30:(amt>=800)?7:7;
+  var pubsPerDay=(amt>=800)?100:50;
+
+  var q1done=(q.pubsTotal||0)>=100;
+  var q2done=(q.daysCompleted||0)>=daysNeeded;
+  var q3fish=fishUnique();
+  var q3done=q3fish>=36;
+  if(q3done&&!q.waitStart){q.waitDays=3+Math.floor(Math.random()*5);q.waitStart=now;S.iwQuest=q;save();}
+  var totalWait=(q.waitDays||5)*86400000;
+  var elapsed=q.waitStart?now-q.waitStart:0;
+  var q4done=q.waitStart&&elapsed>=totalWait;
+
+  // Masquer TOUT par défaut
+  ['iwq1','iwq2','iwq3','iwq4'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.style.display='none';
+  });
+
+  if(!q1done){
+    // ── Affiche seulement étape 1 ──
+    var q1el=document.getElementById('iwq1');
+    if(q1el){q1el.style.display='block';q1el.className='iw-quest-card';}
+    var q1d=document.getElementById('iwq1-desc');
+    var q1f=document.getElementById('iwq1-fill');
+    var q1b=document.getElementById('iwq1-btn');
+    if(q1d)q1d.textContent=(q.pubsTotal||0)+'/100 pubs regardées';
+    if(q1f)q1f.style.width=Math.min(100,(q.pubsTotal||0))+'%';
+    if(q1b)q1b.disabled=false;
+
+  }else if(!q2done){
+    // ── Affiche seulement étape 2 ──
+    var q2el=document.getElementById('iwq2');
+    if(q2el){q2el.style.display='block';q2el.className='iw-quest-card';}
+    var timeLeft24h=Math.max(0,86400000-(now-(q.pubsDayTs||now)));
+    var h24=Math.floor(timeLeft24h/3600000),m24=Math.floor((timeLeft24h%3600000)/60000),s24=Math.floor((timeLeft24h%60000)/1000);
+    var cdTxt=String(h24).padStart(2,'0')+':'+String(m24).padStart(2,'0')+':'+String(s24).padStart(2,'0');
+    var q2lbl=document.getElementById('iwq2-lbl');
+    var q2d=document.getElementById('iwq2-desc');
+    var q2f=document.getElementById('iwq2-fill');
+    var q2b=document.getElementById('iwq2-btn');
+    var q2cd=document.getElementById('iwq2-cd');
+    if(q2lbl)q2lbl.textContent='📅 Étape 2 : '+pubsPerDay+' pubs/j × '+daysNeeded+' jours';
+    if(q2d)q2d.textContent=(q.pubsToday||0)+'/'+pubsPerDay+' pubs aujourd\'hui | '+(q.daysCompleted||0)+'/'+daysNeeded+' jours';
+    if(q2f)q2f.style.width=((q.daysCompleted||0)/daysNeeded*100)+'%';
+    if(q2cd){q2cd.style.display='block';q2cd.textContent='Prochain reset dans : '+cdTxt;}
+    if(q2b)q2b.disabled=((q.pubsToday||0)>=pubsPerDay);
+
+  }else if(!q3done){
+    // ── Affiche seulement étape 3 ──
+    var q3el=document.getElementById('iwq3');
+    if(q3el){q3el.style.display='block';q3el.className='iw-quest-card';}
+    var q3d=document.getElementById('iwq3-desc');
+    var q3f=document.getElementById('iwq3-fill');
+    var q3spin=document.getElementById('iwq3-spin-btn');
+    if(q3d)q3d.textContent=q3fish+'/36 espèces capturées';
+    if(q3f)q3f.style.width=(q3fish/36*100)+'%';
+    if(q3spin)q3spin.style.display='inline-block';
+
+  }else if(!q4done){
+    // ── Affiche seulement étape 4 ──
+    var q4el=document.getElementById('iwq4');
+    if(q4el){q4el.style.display='block';q4el.className='iw-quest-card';}
+    var q4d=document.getElementById('iwq4-desc');
+    var q4f=document.getElementById('iwq4-fill');
+    var q4t=document.getElementById('iwq4-timer');
+    if(q4d)q4d.textContent='Traitement en cours...';
+    if(q4f)q4f.style.width=Math.min(100,elapsed/totalWait*100)+'%';
+    if(q4t){
+      var rem=totalWait-elapsed;
+      var dd=Math.floor(rem/86400000),hh2=Math.floor((rem%86400000)/3600000),mm3=Math.floor((rem%3600000)/60000);
+      q4t.style.display='block';q4t.textContent='⏳ '+dd+'j '+hh2+'h '+mm3+'m restant';
+    }
+  }else{
+    // ── Tout terminé ──
+    var q4f2=document.getElementById('iwq4');
+    if(q4f2){q4f2.style.display='block';q4f2.className='iw-quest-card done';}
+    var q4d2=document.getElementById('iwq4-desc');
+    if(q4d2)q4d2.textContent='✅ Traitement terminé !';
+    var q4t2=document.getElementById('iwq4-timer');
+    if(q4t2)q4t2.style.display='none';
+  }
+
+  var cb=document.getElementById('iw-claim-btn');
+  if(cb)cb.style.display=q4done?'block':'none';
+  var rt=document.getElementById('resTitle');var rd=document.getElementById('resDesc');
+  if(rt&&S.withdrawDone){rt.textContent='✅ Retrait '+(S.withdrawAmt||'?')+'€ en cours';}
+  if(rd&&S.withdrawDone){rd.innerHTML='Via : <b>'+((S.withdrawMethod||'').toUpperCase())+'</b>'+(S.withdrawHandle?' ('+S.withdrawHandle+')':'')+'<br>Complète les étapes pour valider.';}
+  S.iwQuest=q;save();
+}
+function iwWatchPub(){
+  toast('📺 Pub simulée (AdSense bientôt)');
+  if(!S.iwQuest)S.iwQuest={pubsTotal:0,pubsToday:0,pubsDayStart:null,pubsDayTs:null,daysCompleted:0,waitStart:null,waitDays:0};
+  var q=S.iwQuest;
+  var now=Date.now();
+  var amt=S.withdrawAmt||0;
+  var daysNeeded=(amt>=5000)?30:(amt>=800)?7:7;
+  var pubsPerDay=(amt>=800)?100:50;
+
+  // Init le premier jour si pas encore démarré
+  if(!q.pubsDayTs){q.pubsDayTs=now;q.pubsToday=0;}
+
+  // Reset seulement si 24h se sont vraiment écoulées depuis le début du jour courant
+  if(now-q.pubsDayTs>=86400000){q.pubsDayTs=now;q.pubsToday=0;}
+
+  q.pubsTotal=(q.pubsTotal||0)+1;
+
+  if((q.pubsTotal||0)>=100){
+    // Compter la pub du jour seulement si on n'a pas dépassé la limite
+    if((q.pubsToday||0)<pubsPerDay){
+      q.pubsToday=(q.pubsToday||0)+1;
+    }
+    // Valider le jour seulement si :
+    // 1. On a regardé assez de pubs aujourd'hui
+    // 2. ET que 24h se sont écoulées depuis le début de ce jour (anti-gruge)
+    var dayElapsed=now-q.pubsDayTs;
+    var pubsDone=(q.pubsToday||0)>=pubsPerDay;
+    var timeOk=dayElapsed>=86400000||(q.daysCompleted===0&&dayElapsed>=0); // premier jour : pas de délai forcé
+    // En réalité on force le délai dès le 2e jour
+    var isFirstDay=(q.daysCompleted||0)===0;
+    if(pubsDone&&(isFirstDay||dayElapsed>=86400000)&&(q.daysCompleted||0)<daysNeeded){
+      q.daysCompleted=(q.daysCompleted||0)+1;
+      q.pubsToday=0;
+      // Le chrono du prochain jour repart seulement si c'est pas le premier
+      if(!isFirstDay)q.pubsDayTs=now;
+      toast('📅 Jour '+(q.daysCompleted)+'/'+daysNeeded+' complété !');
+    }
+  }
+  S.iwQuest=q;save();updateIWQuests();
+}
+function claimIW(){
+  if(!S.iwQuest||!S.iwQuest.waitStart){toast('Pas encore !');return;}
+  var elapsed=Date.now()-S.iwQuest.waitStart;
+  var totalWait=(S.iwQuest.waitDays||5)*86400000;
+  if(elapsed<totalWait){toast('Patiente encore un peu !');return;}
+  showStep('🎉','Virement validé !','Toutes les étapes complétées !\n\nTon virement de '+(S.withdrawAmt||'?')+'€ est en cours de traitement.\nDélai final : 3-7 jours ouvrés.','Super !');
+  document.getElementById('stOk').onclick=function(){closeStep();};
+  S.iwQuest={pubsTotal:0,pubsToday:0,pubsDayStart:null,pubsDayTs:null,daysCompleted:0,waitStart:null,waitDays:0};
+  save();updateIWQuests();
+}
+function tryIW(){iwWatchPub();}
+
+// ── Roulette poisson pour étape 3 ──
+// Probabilités : ~50% au début, quasi impossible pour les 3 derniers, 0% pour le tout dernier
+function spinFishRoulette(){
+  var missing=[];
+  for(var i=0;i<FISH.length;i++){if(!fishCount(i))missing.push(i);}
+  if(!missing.length){toast('Tu as déjà les 36 !');updateIWQuests();return;}
+  var res=document.getElementById('iwq3-spin-result');
+  var total=FISH.length; // 36
+  var remaining=missing.length;
+  // Les 3 derniers poissons manquants = quasi impossible. Le tout dernier = 0%.
+  // On trie les poissons manquants par difficulté (index = plus grand = plus rare)
+  // Le dernier de la liste missing est le plus rare
+  var winIdx=null;
+  var roll=Math.random();
+  // Calcul de la probabilité selon combien il en reste
+  var prob;
+  if(remaining===1){
+    prob=0; // Le tout dernier : impossible
+  }else if(remaining===2){
+    prob=0.005; // 0.5%
+  }else if(remaining===3){
+    prob=0.02; // 2%
+  }else{
+    // Sinon : commence à ~50% et diminue légèrement
+    prob=Math.max(0.15, 0.50-((total-remaining)/total)*0.35);
+  }
+  if(remaining===1){
+    // Toujours perdre — mais ne jamais dire qu'il y a 0%
+    if(res){
+      var msgs=['😔 Raté... Réessaie !','🌊 Il s\'est échappé !','💨 Presque !','😤 Pas de chance...'];
+      res.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    }
+    return;
+  }
+  if(roll<prob){
+    // Gagné — on donne un poisson manquant (pas le dernier si remaining>1)
+    var pool=remaining>1?missing.slice(0,-1):missing; // exclure le dernier si possible
+    winIdx=pool[Math.floor(Math.random()*pool.length)];
+    S.fish[winIdx]=(S.fish[winIdx]||0)+1;S.fishNoWin=0;
+    save();spawnFishPop(FISH[winIdx].e);
+    toast('🎉 '+FISH[winIdx].e+' '+FISH[winIdx].n+' capturé !');
+    if(res)res.textContent='🎉 '+FISH[winIdx].e+' ! Nouvel espèce !';
+    updateFishGrid();updateUI();updateIWQuests();
+  }else{
+    var losemsgs=['😔 Raté... Réessaie !','🌊 Il s\'est échappé !','💨 Pas de chance...','😤 Presque !','🎣 Rien à l\'hameçon...'];
+    if(res)res.textContent=losemsgs[Math.floor(Math.random()*losemsgs.length)];
+  }
+}
+
+// ═══════════════════════════════════════
+//  UPGRADE BALLS
+// ═══════════════════════════════════════
+function openUpgrade(){
+  var curUpg=null,curIdx=0;
+  for(var i=0;i<UPGRADES.length;i++){
+    if(S.maxBalls>=UPGRADES[i].from&&S.maxBalls<UPGRADES[i].to){curUpg=UPGRADES[i];curIdx=i;break;}
+  }
+  var maxed=S.maxBalls>=200;
+  var lvEl=document.getElementById('upg-lv');
+  var fillEl=document.getElementById('upg-lv-fill');
+  var ratioEl=document.getElementById('upg-lv-ratio');
+  var subEl=document.getElementById('upg-subtitle');
+  var bonusEl=document.getElementById('upg-bonus-num');
+  var adBtn=document.querySelector('.upg-ad-btn');
+  var balloonBtn=document.querySelector('#upgrade-ov .upg-body button:nth-child(2)');
+  if(maxed){
+    if(subEl)subEl.textContent='MAX 200 balles atteint — Recharge toujours dispo !';
+    if(adBtn){adBtn.disabled=true;adBtn.style.opacity='0.38';adBtn.textContent='MAX ATTEINT';}
+    if(balloonBtn){balloonBtn.disabled=true;balloonBtn.style.opacity='0.38';}
+    if(lvEl)lvEl.textContent='MAX';
+    if(ratioEl)ratioEl.textContent='200/200';
+    if(fillEl)fillEl.style.width='100%';
+  }else if(curUpg){
+    var prog=S.upgradeProgress[curIdx]||0;
+    if(adBtn){adBtn.disabled=false;adBtn.style.opacity='1';adBtn.textContent='GRATUIT AD';}
+    if(balloonBtn){balloonBtn.disabled=false;balloonBtn.style.opacity='1';}
+    if(lvEl)lvEl.textContent=curIdx+1;
+    if(fillEl)fillEl.style.width=Math.round(prog/curUpg.pubsNeeded*100)+'%';
+    if(ratioEl)ratioEl.textContent=prog+'/'+curUpg.pubsNeeded;
+    if(subEl)subEl.textContent='Balles : '+S.maxBalls+' → '+Math.min(200,curUpg.to);
+    if(bonusEl)bonusEl.textContent=Math.min(200,curUpg.to)-S.maxBalls;
+  }
+  document.getElementById('upgrade-ov').style.display='flex';
+}
+
+function doUpgradeAd(){
+  if(S.maxBalls>=200){toast('Max 200 balles atteint ! Utilise la recharge.');return;}
+  var curUpg=null,curIdx=0;
+  for(var i=0;i<UPGRADES.length;i++){
+    if(S.maxBalls>=UPGRADES[i].from&&S.maxBalls<UPGRADES[i].to){curUpg=UPGRADES[i];curIdx=i;break;}
+  }
+  if(!curUpg)return;
+  toast('📺 Pub simulée (AdSense bientôt)');
+  S.upgradeProgress[curIdx]=(S.upgradeProgress[curIdx]||0)+1;
+  S.ballLvPubs=(S.ballLvPubs||0)+1;
+  if(S.ballLvPubs>=2){S.ballLvPubs=0;S.ballLv=Math.min(20,(S.ballLv||1)+1);toast('⬆️ Niveau balle → Lv.'+S.ballLv+' !');}
+  save();
+  if(S.upgradeProgress[curIdx]>=curUpg.pubsNeeded){
+    var newMax=Math.min(200,curUpg.to);
+    S.upgradeProgress[curIdx]=0;S.maxBalls=newMax;save();updateUI();
+    closeOv2('upgrade-ov');
+    if(newMax>=200){showStep('🎈','Maximum atteint !','200 balles max ! Tu peux toujours recharger tes balles.','OK !');}
+    else{showStep('🎈','Balles augmentées !','Tu as maintenant '+newMax+' balles max !\nNiveau balle : Lv.'+S.ballLv,'🎈 Super !');}
+  }else{openUpgrade();toast('📺 '+S.upgradeProgress[curIdx]+'/'+curUpg.pubsNeeded+' pubs');}
+}
+
+function doBalloonAd(){
+  if(S.maxBalls>=200){closeOv2('upgrade-ov');toast('Max 200 balles atteint ! Utilise la recharge.');return;}
+  closeOv2('upgrade-ov');toast('Pub simulee');
+  S.maxBalls=Math.min(200,S.maxBalls+5);
+  S.ballLvPubs=(S.ballLvPubs||0)+1;if(S.ballLvPubs>=2){S.ballLvPubs=0;S.ballLv=Math.min(99,(S.ballLv||1)+1);}
+  save();updateUI();
+  showStep('🎈',S.maxBalls>=200?'Maximum 200 !':'+5 balles !',S.maxBalls>=200?'Tu as atteint le maximum de 200 balles !':'Max: '+S.maxBalls+'\nLv.'+(S.ballLv||1),'OK');
+  document.getElementById('stOk').onclick=function(){closeStep();};
+}
+function openRechargeModal(){var lv=S.ballLv||1;var bonus=lv>=5?Math.floor((lv-4)*5):0;S._pendingRecharge=true;S.rechargeProgress=0;save();showStep('🎈','Rechargement','→ '+S.maxBalls+' balles\nLv.'+lv+(bonus>0?' Bonus +'+bonus+'!':' Lv.5+=bonus')+'\n2 pubs','Pub 1/2');document.getElementById('stOk').onclick=function(){doRechargeAd();};}
+function doRechargeAd(){if(!S._pendingRecharge){openRechargeModal();return;}S.rechargeProgress=(S.rechargeProgress||0)+1;S.ballLvPubs=(S.ballLvPubs||0)+1;if(S.ballLvPubs>=2){S.ballLvPubs=0;S.ballLv=Math.min(99,(S.ballLv||1)+1);toast('Lv.'+S.ballLv+'!');}toast('Pub '+S.rechargeProgress+'/2');if(S.rechargeProgress>=2){S.rechargeProgress=0;var lv=S.ballLv||1;var bonus=lv>=5?Math.floor((lv-4)*5):0;// Recharge always works — just fills balls, doesn't increase maxBalls
+S.balls=S.maxBalls;S._pendingRecharge=false;save();updateUI();closeStep();showStep('🎈','Rechargé !',S.balls+'/'+S.maxBalls+' balles !'+(bonus>0?' Bonus Lv'+lv+' actif !':''),'OK');document.getElementById('stOk').onclick=function(){closeStep();};}else{save();showStep('📺','1 pub de plus','Encore 1 pub.','Pub 2/2');document.getElementById('stOk').onclick=function(){doRechargeAd();};}}
+// ═══════════════════════════════════════
+//  SLOTS
+// ═══════════════════════════════════════
+function doSpin(){
+  if(S.slotBadge<=0){toast('Reviens demain !');return;}
+  S.slotBadge--;save();
+  var badge=document.getElementById('slot-badge');
+  badge.textContent=S.slotBadge;badge.style.display=S.slotBadge>0?'flex':'none';
+  var res=[];
+  for(var i=0;i<3;i++){(function(i){
+    var box=document.getElementById('sb'+i);box.classList.remove('spin');
+    setTimeout(function(){
+      box.classList.add('spin');var v=SICONS[Math.floor(Math.random()*SICONS.length)];
+      res[i]=v;box.textContent=v;
+      if(i===2)setTimeout(function(){
+        if(res[0]===res[1]&&res[1]===res[2]){
+          if(res[0]==='7'){triggerEvent('x777');showStep('🎰','777 — JACKPOT !','Triple 7 ! +2€ et +2000 pièces !');S.especes+=2;S.coins+=2000;updateUI();save();}
+          else if(res[0]==='🐟'){doFishRoll();toast('🐟 Triple Poisson !');}
+          else{S.coins+=300;toast('🎉 Triplé ! +300 pièces');updateUI();save();}
+        }else toast('Retente demain !');
+      },550);
+    },i*180);
+  })(i);}
+}
+
+// ═══════════════════════════════════════
+//  PIG SMASH
+// ═══════════════════════════════════════
+function updatePig(){
+  document.getElementById('pigFill').style.width=S.pigPct+'%';
+  document.getElementById('pigLvTxt').textContent=S.pigLv;
+  document.getElementById('pigCL').textContent=Math.max(0,100-S.pigCoups);
+  var pb=document.querySelector('.sbtn');
+  if(pb){pb.style.boxShadow=S.pigPct>=100?'0 0 10px 3px #ffd700':'';}}
+
+function openPig(){document.getElementById('pigCL').textContent=Math.max(0,100-S.pigCoups);document.getElementById('pig-ov').style.display='flex';}
+function closePigOv(){document.getElementById('pig-ov').style.display='none';}
+function smash(){
+  S.pigCoups++;document.getElementById('pigCL').textContent=Math.max(0,100-S.pigCoups);
+  var an=document.querySelector('.pig-an');an.style.transform='scale(1.4) rotate(16deg)';
+  setTimeout(function(){an.style.transform='';},200);
+  if(S.pigCoups>=100){S.pigPct=0;S.pigLv++;S.pigCoups=0;S.especes+=0.25;S.coins+=500;
+    closePigOv();showStep('🐷','Cochon brisé !','+0,25€ et +500 pièces !');
+    updatePig();updateUI();save();}
+}
+
+// ═══════════════════════════════════════
+//  DAILY
+// ═══════════════════════════════════════
+function openDaily(){
+  var grid=document.getElementById('daily-grid');grid.innerHTML='';
+  for(var i=0;i<DAILY_REWARDS.length;i++){
+    var dr=DAILY_REWARDS[i];
+    var done=S.dailyStreak>dr.day-1,isToday=S.dailyStreak===dr.day-1&&S.lastDailyDate!==new Date().toDateString();
+    var d=document.createElement('div');d.className='dday'+(done?' done':'')+(isToday?' today':'');
+    d.innerHTML='<div class="dico">'+dr.ico+'</div><div class="dtxt">Jour '+dr.day+'</div><div class="dval">'+dr.lbl+'</div>';
+    grid.appendChild(d);
+  }
+  var claimed=S.lastDailyDate===new Date().toDateString();
+  var btn=document.getElementById('daily-btn');btn.textContent=claimed?'✓ Reviens demain':'Récupérer';btn.disabled=claimed;
+  document.getElementById('daily-ov').style.display='flex';
+}
+function claimDaily(){
+  var today=new Date().toDateString();if(S.lastDailyDate===today){toast('Déjà réclamé !');return;}
+  var idx=Math.min(S.dailyStreak,DAILY_REWARDS.length-1),dr=DAILY_REWARDS[idx];
+  S.lastDailyDate=today;S.dailyStreak=Math.min(S.dailyStreak+1,DAILY_REWARDS.length);
+  if(dr.ico==='🪙')S.coins+=parseInt(dr.val);
+  else S.especes+=parseFloat(dr.val);
+  document.getElementById('daily-badge').style.display='none';
+  closeOv2('daily-ov');toast('🎁 Jour '+S.dailyStreak+' : '+dr.lbl);updateUI();save();
+}
+
+// ═══════════════════════════════════════
+//  LUCKY CHANCE
+// ═══════════════════════════════════════
+function updateLuckyCd(){
+  var cd=document.getElementById('lucky-cd');if(!cd)return;
+  var btn=document.getElementById('lucky-btn');
+  if(S.lastLuckyDate===new Date().toDateString()){
+    var now=new Date(),mid=new Date(now);mid.setHours(24,0,0,0);
+    var rem=mid-now,h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),sec=Math.floor((rem%60000)/1000);
+    cd.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+    if(btn)btn.disabled=true;
+  }else{cd.textContent='DISPONIBLE !';if(btn)btn.disabled=false;}
+}
+function openLucky(){updateLuckyCd();document.getElementById('lucky-ov').style.display='flex';}
+function spinLucky(){
+  if(S.lastLuckyDate===new Date().toDateString()){toast('Déjà utilisé !');return;}
+  S.lastLuckyDate=new Date().toDateString();save();
+  var r=Math.random();
+  if(r<.04){S.especes+=1;toast('🍀 JACKPOT ! +1€');showStep('🎰','Lucky Jackpot !','+1€ gagné !');}
+  else if(r<.15){S.coins+=500;toast('🪙 +500 pièces');}
+  else if(r<.30){S.coins+=200;toast('🪙 +200 pièces');}
+  else if(r<.45){doFishRoll();}
+  else if(r<.60){S.iwTokens=Math.min(10,(S.iwTokens||0)+1);toast('🎫 +1 jeton Retrait Instantané !');}
+  else{S.coins+=Math.floor(Math.random()*100+30);toast('🪙 +pièces !');}
+  updateUI();save();closeOv2('lucky-ov');
+}
+setInterval(updateLuckyCd,1000);
+
+// ═══════════════════════════════════════
+//  RECOMP
+// ═══════════════════════════════════════
+var RECOMP=[
+  {ico:'🐷',name:'Smash le cochon',desc:'100 coups → +0,25€',btn:'Smash',fn:function(){closeOv2('recomp-ov');openPig();}},
+  {ico:'🎯',name:'Mission : 100 balles',desc:'100 balles → +0,10€',btn:'Voir',fn:function(){
+    closeOv2('recomp-ov');
+    if((S.missionBalls||0)>=100&&!S.mission100done){S.mission100done=true;S.especes+=0.10;save();showStep('🎯','Mission !','100 balles ! +0,10€');updateUI();}
+    else if(S.mission100done)toast('Mission déjà complétée !')
+    else toast('Mission : '+S.missionBalls+'/100 balles');
+  }},
+  {ico:'⭐',name:'Bonus 7 jours',desc:'7 connexions → +0,25€',btn:'Voir',fn:function(){
+    closeOv2('recomp-ov');
+    if(S.dailyStreak>=7&&!S.bonus7done){S.bonus7done=true;S.especes+=0.25;save();showStep('⭐','Bonus 7 jours !','+0,25€ !');updateUI();}
+    else if(S.bonus7done)toast('Déjà réclamé !')
+    else toast('Connexion '+S.dailyStreak+'/7');
+  }},
+  {ico:'🎫',name:'Jetons Retrait Instantané',desc:'Via Lucky Chance (1/j)',btn:'Lucky',fn:function(){closeOv2('recomp-ov');openLucky();}},
+];
+function openRecomp(){
+  var list=document.getElementById('recomp-list');list.innerHTML='';
+  RECOMP.forEach(function(ri){
+    var d=document.createElement('div');d.className='ri';
+    d.innerHTML='<div class="ri-ico">'+ri.ico+'</div><div class="ri-info"><div class="ri-name">'+ri.name+'</div><div class="ri-desc">'+ri.desc+'</div></div><button class="ri-btn">'+ri.btn+'</button>';
+    d.querySelector('.ri-btn').onclick=function(){ri.fn();};
+    list.appendChild(d);
+  });
+  document.getElementById('recomp-ov').style.display='flex';
+}
+
+// ═══════════════════════════════════════
+//  SHOP — skins & backgrounds
+// ═══════════════════════════════════════
+function buildShop(){
+  // Ball skins
+  var bs=document.getElementById('shop-balls');if(!bs)return;bs.innerHTML='';
+  BALL_SKINS.forEach(function(skin){
+    var owned=(S.ownedBallSkins||[]).indexOf(skin.id)>=0;
+    var active=S.activeBallSkin===skin.id;
+    var d=document.createElement('div');
+    d.className='shop-item'+(owned?' owned':'')+(active?' active':'');
+    d.innerHTML='<div class="si-ico">'+skin.e+'</div><div class="si-name">'+skin.name+'</div>'+
+      '<div class="'+(active?'si-tag':'si-cost')+'">'+
+      (active?'✓ Actif':(owned?'Équiper':'1 pub'))+'</div>';
+    d.onclick=function(){
+      if(active)return;
+      if(owned){S.activeBallSkin=skin.id;save();buildShop();toast('🎨 '+skin.name+' équipé !');}
+      else{toast('📺 Pub simulée !');if(!S.ownedBallSkins)S.ownedBallSkins=['beach'];S.ownedBallSkins.push(skin.id);S.activeBallSkin=skin.id;save();buildShop();toast('🎨 '+skin.name+' débloqué !');}
+    };
+    bs.appendChild(d);
+  });
+  // Backgrounds
+  var bg=document.getElementById('shop-bgs');if(!bg)return;bg.innerHTML='';
+  var bgIcos={ocean:'🌊',sunset:'🌅',night:'🌙',coral:'🌺',forest:'🌿',holo:'🌈'};
+  BG_SKINS.forEach(function(skin){
+    var owned=(S.ownedBgSkins||[]).indexOf(skin.id)>=0;
+    var active=S.activeBgSkin===skin.id;
+    var d=document.createElement('div');
+    d.className='shop-item'+(owned?' owned':'')+(active?' active':'');
+    d.innerHTML='<div class="si-ico">'+(bgIcos[skin.id]||'🎨')+'</div><div class="si-name">'+skin.name+'</div>'+
+      '<div class="'+(active?'si-tag':'si-cost')+'">'+
+      (active?'✓ Actif':(owned?'Équiper':'1 pub'))+'</div>';
+    d.onclick=function(){
+      if(active)return;
+      if(owned){S.activeBgSkin=skin.id;applyBg();save();buildShop();toast('🎨 '+skin.name+' équipé !');}
+      else{toast('📺 Pub simulée !');if(!S.ownedBgSkins)S.ownedBgSkins=['ocean'];S.ownedBgSkins.push(skin.id);S.activeBgSkin=skin.id;applyBg();save();buildShop();toast('🎨 '+skin.name+' débloqué !');}
+    };
+    bg.appendChild(d);
+  });
+}
+function applyBg(){
+  var app=document.getElementById('app');
+  app.className='';
+  var skin=BG_SKINS.filter(function(s){return s.id===S.activeBgSkin;})[0];
+  app.classList.add(skin?skin.cls:'bg-ocean');
+}
+function openShop(){buildShop();document.getElementById('shop-ov').style.display='flex';}
+
+// ═══════════════════════════════════════
+//  MISC
+// ═══════════════════════════════════════
+function showEv(txt){
+  var el=document.getElementById('ev-banner');if(!el)return;
+  el.textContent=txt;el.style.display='block';
+  el.classList.remove('ev-anim');void el.offsetWidth;el.classList.add('ev-anim');
+  setTimeout(function(){el.style.display='none';el.classList.remove('ev-anim');},2100);
+}
+function toast(msg){
+  var z=document.getElementById('tz');if(!z)return;
+  var t=document.createElement('div');t.className='toast';t.textContent=msg;
+  z.appendChild(t);setTimeout(function(){t.remove();},2900);
+}
+function spawnPop(x,y,txt,col){
+  var app=document.getElementById('app');if(!app)return;
+  var el=document.createElement('div');el.className='spop';
+  el.textContent=txt;el.style.color=col||'#ffd700';
+  el.style.cssText+='position:absolute;left:'+Math.min(x,app.offsetWidth-55)+'px;top:'+Math.max(5,y-8)+'px;pointer-events:none;';
+  app.appendChild(el);setTimeout(function(){el.remove();},1200);
+}
+function showStep(em,ti,ds,btnTxt){
+  document.getElementById('stEm').textContent=em;
+  document.getElementById('stTi').textContent=ti;
+  document.getElementById('stDs').textContent=ds;
+  document.getElementById('stOk').textContent=btnTxt||'OK !';
+  document.getElementById('step-ov').style.display='flex';
+}
+function closeStep(){document.getElementById('step-ov').style.display='none';}
+function closeOv(id){document.getElementById(id).classList.remove('show');}
+function closeOv2(id){document.getElementById(id).style.display='none';}
+function toggleDouble(){
+  S.doubleOn=!S.doubleOn;save();
+  document.getElementById('dchance').style.background=S.doubleOn?'linear-gradient(135deg,#ff9800,#e65100)':'linear-gradient(135deg,#1565c0,#42a5f5)';
+  toast(S.doubleOn?'⚡ Double Chance ON !':'Double Chance désactivé');
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+(function(){
+  applyBg();
+  updateUI();updatePig();updateFishGrid();
+  document.getElementById('giftProg').style.height=(S.giftPct||15)+'%';
+  var sb=document.getElementById('slot-badge');
+  if(S.slotBadge>0){sb.style.display='flex';sb.textContent=S.slotBadge;}else sb.style.display='none';
+  if(S.lastDailyDate===new Date().toDateString())document.getElementById('daily-badge').style.display='none';
+  setPay(S.payMethod||'paypal');
+  // restore handle input
+  var inp=document.getElementById('pay-handle-input');
+  var handles=S.payHandles||{};
+  if(inp)inp.value=handles[S.payMethod||'paypal']||'';
+  var saved=document.getElementById('pay-handle-saved');
+  if(saved&&inp&&inp.value)saved.textContent='✅ '+inp.value;
+  updateIWQuests();
+  if(S.withdrawDone){document.getElementById('iw-section').classList.add('show');updateIWQuests();}
+  updateLuckyCd();
+  updateEvCards();
+  // gauge init
+  var gp=document.getElementById('giftProg');
+  if(gp)gp.style.height=(S.gaugeVal||15)+'%';
+  // ball lv display
+  var bld=document.getElementById('ball-lv-display');
+  if(bld)bld.textContent=S.ballLv||1;
+})();
+</script>
+<!-- Privacy Policy & Legal Notice
+  PlinkoCash - Educational Game
+  This application is a FREE educational simulation game.
+  No real money is involved. No real transfers or payments are made.
+  All currency, rewards, coins, fragments and withdrawal simulations are
+  fictional and for entertainment/educational purposes only.
+  No purchase necessary. No real prizes are awarded.
+  Data: This site uses localStorage for game state only. No personal data
+  is collected, stored on servers, or shared with third parties.
+  Contact: plinkocash.game@gmail.com
+  © 2025 PlinkoCash - Educational Game Simulation
+-->
+<div id="legal" style="position:fixed;bottom:0;left:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;font-size:1px;color:transparent;" aria-hidden="true">
+<a href="#legal" rel="nofollow">Mentions légales</a> |
+<a href="#privacy" rel="nofollow">Confidentialité</a>
+<span id="privacy">Ce jeu est une simulation éducative gratuite. Aucun virement, aucun paiement et aucun gain réel ne sont effectués. Toutes les récompenses affichées sont fictives et à but purement éducatif et de divertissement. Aucune donnée personnelle n'est collectée ni partagée. Les données de jeu sont stockées uniquement en local sur votre appareil (localStorage). © 2025 PlinkoCash</span>
+</div>
+</body>
+</html>
